@@ -1,0 +1,183 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { min-width: 320px; background: var(--background); color: var(--foreground); font-family: var(--font-sans, 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif); -webkit-font-smoothing: antialiased; }
+  button, input, select, textarea { font: inherit; }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  /* Todas las cifras con ancho de dígito fijo. */
+  .num, table, th, td, [data-slot="badge"], [data-slot="progress"] { font-variant-numeric: tabular-nums; }
+}
+
+/* Animated login backdrop: locally rendered, lightweight and reduced-motion aware. */
+.login-scene {
+  background: radial-gradient(ellipse at 10% 15%, rgba(242,106,27,.38), transparent 36%),
+              radial-gradient(ellipse at 90% 80%, rgba(255,138,76,.22), transparent 38%),
+              linear-gradient(125deg, #0D0D10 0%, #17171B 48%, #0D0D10 100%);
+  isolation: isolate;
+}
+.login-orb { position: absolute; pointer-events: none; border-radius: 9999px; filter: blur(70px); opacity: .36; will-change: transform; }
+.login-orb-one { width: 24rem; height: 24rem; background: #F26A1B; top: -6rem; left: -5rem; animation: login-drift-one 18s ease-in-out infinite alternate; }
+.login-orb-two { width: 30rem; height: 30rem; background: #FF8A4C; bottom: -11rem; right: -8rem; animation: login-drift-two 22s ease-in-out infinite alternate; }
+.login-grid { position: absolute; inset: 0; pointer-events: none; opacity: .12; background-image: linear-gradient(rgba(255,255,255,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px); background-size: 46px 46px; mask-image: linear-gradient(90deg, black, transparent 85%); }
+@keyframes login-drift-one { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(15vw,16vh,0) scale(1.12); } }
+@keyframes login-drift-two { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-14vw,-10vh,0) scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .login-orb-one, .login-orb-two { animation: none; } html { scroll-behavior: auto; } }
+
+/* ── Animaciones de bloques ─────────────────────────────────────────────────
+   Mismo lenguaje que la referencia:
+   · hidden → show: opacity 0→1, blur(12px)→0, y 12→0.
+   · fill-mode "backwards" (no "forwards"): al terminar, cada bloque recupera
+     sus propios estilos (hover, transforms de motion, etc.).
+   · Escalonado 80 ms y tope en el bloque 12: en listas largas el resto se
+     muestra ya montado, así no se animan decenas de elementos a la vez.
+   · will-change solo en los bloques que realmente entran animados (máx. 12).
+   · Todo se desactiva con prefers-reduced-motion al final del archivo. */
+@keyframes ms-reveal {
+  from { opacity: 0; filter: blur(12px); transform: translateY(12px); }
+  to { opacity: 1; filter: blur(0px); transform: none; }
+}
+/* Entrada sin blur, para tarjetas anidadas (evita desenfoques en listas densas). */
+@keyframes ms-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Tarjetas de la vista: entran con blur + desplazamiento en cascada. */
+[data-slot="card"]:not([data-slot="card"] *) {
+  animation: ms-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  will-change: opacity, filter, transform;
+}
+[data-slot="card"]:nth-child(1) { animation-delay: 0s; }
+[data-slot="card"]:nth-child(2) { animation-delay: 0.08s; }
+[data-slot="card"]:nth-child(3) { animation-delay: 0.16s; }
+[data-slot="card"]:nth-child(4) { animation-delay: 0.24s; }
+[data-slot="card"]:nth-child(5) { animation-delay: 0.32s; }
+[data-slot="card"]:nth-child(6) { animation-delay: 0.4s; }
+[data-slot="card"]:nth-child(7) { animation-delay: 0.48s; }
+[data-slot="card"]:nth-child(8) { animation-delay: 0.56s; }
+[data-slot="card"]:nth-child(9) { animation-delay: 0.64s; }
+[data-slot="card"]:nth-child(10) { animation-delay: 0.72s; }
+[data-slot="card"]:nth-child(11) { animation-delay: 0.8s; }
+[data-slot="card"]:nth-child(12) { animation-delay: 0.88s; }
+[data-slot="card"]:nth-child(n + 13) { animation: none; will-change: auto; }
+/* Tarjetas dentro de otra tarjeta: entrada corta y sin espera. */
+[data-slot="card"] [data-slot="card"] {
+  animation: ms-rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 0s;
+  will-change: auto;
+}
+
+/* Listas, filas y bloques que no son tarjetas: .stagger-in en el contenedor. */
+.stagger-in > * { animation: ms-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.stagger-in > *:nth-child(1) { animation-delay: 0s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.18s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.24s; }
+.stagger-in > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-in > *:nth-child(7) { animation-delay: 0.36s; }
+.stagger-in > *:nth-child(8) { animation-delay: 0.42s; }
+.stagger-in > *:nth-child(9) { animation-delay: 0.48s; }
+.stagger-in > *:nth-child(10) { animation-delay: 0.54s; }
+.stagger-in > *:nth-child(11) { animation-delay: 0.6s; }
+.stagger-in > *:nth-child(12) { animation-delay: 0.66s; }
+.stagger-in > *:nth-child(n + 13) { animation: none; }
+
+/* Contadores y badges que aparecen cuando termina de cargar: pequeño rebote. */
+@keyframes ms-pop {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.pop-in { animation: ms-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+
+/* Barras de progreso: se llenan de izquierda a derecha, en paralelo. */
+@keyframes ms-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.bar-fill {
+  transform-origin: left center;
+  animation: ms-grow-x 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Barrido de tema: el snapshot nuevo se revela con clip-path desde el botón (ver
+   Layout). Aquí solo se anula el cross-fade por defecto de View Transitions. */
+::view-transition-old(root) { animation: none; mix-blend-mode: normal; z-index: 1; }
+/* El snapshot nuevo va encima: el clip-path orgánico (ver Layout) lo va revelando
+   sobre el anterior. */
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; z-index: 2; }
+
+@layer components {
+  /* Feedback de pulsación al presionar cualquier botón (equivale a whileTap 0.95).
+     Los utilitarios de Tailwind (transition-colors, transition-all…) siguen
+     ganando por orden de capas, así que no se rompe ninguna transición. */
+  button:not(:disabled) {
+    transition-property: transform;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+  }
+  button:not(:disabled):active { transform: scale(0.95); }
+}
+
+/* ── Estilo de tarjetas ─────────────────────────────────────────────────────
+   Solo las tarjetas de la vista: `:not([data-slot="card"] *)` deja fuera las
+   que van dentro de otra tarjeta, que conservan su estilo original.
+   Reglas sin capa a propósito: tienen prioridad sobre los utilitarios que cada
+   página aplica (rounded-2xl, shadow-sm, p-5…), así todas las tarjetas de la
+   vista comparten radio, elevación y aire. */
+[data-slot="card"]:not([data-slot="card"] *) {
+  border-radius: 1.125rem;
+  box-shadow: var(--app-shadow-card);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Un poco más de tamaño: las tarjetas de la vista con p-5 (1.25rem) pasan a
+   1.5rem por lado. Las de dentro se quedan como estaban. */
+[data-slot="card"].p-5:not([data-slot="card"] *) { padding: 1.5rem; }
+/* Excepciones: variantes que salen del estilo común. */
+[data-slot="card"].rounded-3xl:not([data-slot="card"] *) { border-radius: 1.5rem; }
+[data-slot="card"].border-dashed:not([data-slot="card"] *) { box-shadow: none; }
+/* Las tarjetas de la vista se elevan suavemente al pasar el cursor (y: -2). */
+[data-slot="card"]:not([data-slot="card"] *):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--app-shadow-card-hover);
+}
+
+/* Números: anchura fija de dígito para que no salten al contar ni en tablas. */
+.num, table { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="card"], [data-slot="card"] [data-slot="card"], .stagger-in > *, .pop-in, .bar-fill { animation: none !important; }
+  button:not(:disabled):active { transform: none !important; }
+  [data-slot="card"]:hover { transform: none !important; }
+}
+
+/* Shared brand tokens. Each business can override these through its saved appearance settings. */
+:root {
+  --brand-primary: #F26A1B;
+  --brand-secondary: #FF8A4C;
+  --brand-accent: #FFC09B;
+  --brand-background: #F4F4F6;
+  --brand-surface: #FFFFFF;
+  --brand-soft: #F26A1B14;
+}
+.bg-orange-600, .bg-orange-500 { background-color: var(--brand-primary) !important; }
+.text-orange-600, .text-orange-500, .text-orange-700 { color: var(--brand-primary) !important; }
+.border-orange-200, .border-orange-300, .border-orange-400 { border-color: color-mix(in srgb, var(--brand-primary) 25%, white) !important; }
+.bg-orange-50 { background-color: var(--brand-soft) !important; }
+.hover\\:bg-orange-700:hover, .hover\\:bg-orange-600:hover { background-color: color-mix(in srgb, var(--brand-primary) 86%, black) !important; }
+.bg-background { background-color: var(--brand-background) !important; }
+.bg-card { background-color: var(--brand-surface) !important; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline-color: var(--brand-primary); }
+::selection { background: color-mix(in srgb, var(--brand-primary) 20%, transparent); }
+
+/* Brand-aware gradients for common legacy utility classes. */
+.from-orange-400, .from-orange-500, .from-orange-600 { --tw-gradient-from: var(--brand-primary) var(--tw-gradient-from-position) !important; }
+.to-yellow-500, .to-amber-500, .to-orange-600, .to-orange-700 { --tw-gradient-to: var(--brand-secondary) var(--tw-gradient-to-position) !important; }
+.from-orange-50 { --tw-gradient-from: var(--brand-soft) var(--tw-gradient-from-position) !important; }
+.border-orange-200, .border-orange-300 { border-color: color-mix(in srgb, var(--brand-primary) 22%, white) !important; }
