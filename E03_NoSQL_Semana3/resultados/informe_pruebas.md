@@ -9,7 +9,7 @@
 | Base de datos | `emprendimiento_sena_lab` |
 | Dataset | `S03_UE_V1` (esquema `1.1`) |
 | Colecciones | `s03_emprendedores`, `s03_iniciativas`, `s03_asesorias` |
-| Fecha de ejecucion | 2026-10-21T16:16:59.474Z |
+| Fecha de ejecucion | 2026-10-22T12:15:28.512Z |
 | Controles ejecutados | 41 |
 | OK | 41 |
 | AVISO | 0 |
@@ -52,7 +52,7 @@
 | V-17.asesorias.ejson | OK | Los 30 identificadores del archivo coinciden con los de s03_asesorias | EJSON valido y Dates preservados |
 | V-18 | OK | Ningun archivo del entregable contiene la contrasena de practica | carpeta .lab excluida por estar en .gitignore |
 | V-19 | OK | Entregable presente y con contenido: resultados/resultados_crud.md | 17928 bytes |
-| V-19 | OK | Entregable presente y con contenido: resultados/resultados_consultas.md | 16328 bytes |
+| V-19 | OK | Entregable presente y con contenido: resultados/resultados_consultas.md | 16330 bytes |
 | V-19 | OK | Entregable presente y con contenido: docs/diccionario_datos_v1.1.md | 18275 bytes |
 | V-19 | OK | Entregable presente y con contenido: docs/matriz_consultas_C01_C10.md | 21846 bytes |
 | V-19 | OK | Entregable presente y con contenido: docs/registro_operaciones_crud.md | 11263 bytes |

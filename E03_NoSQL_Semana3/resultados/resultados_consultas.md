@@ -7,7 +7,7 @@
 | --- | --- |
 | Base de datos | `emprendimiento_sena_lab` |
 | Dataset | `S03_UE_V1` |
-| Fecha de ejecucion | 2026-10-21T15:51:44.863Z |
+| Fecha de ejecucion | 2026-10-22T12:15:24.330Z |
 | Consultas ejecutadas | 12 |
 | Discrepancias | 0 |
 | Modificacion de datos | ninguna (solo lectura) |
@@ -40,7 +40,7 @@
 - **Valor esperado:** 3
 - **Estado:** COINCIDE
 - **Identificadores devueltos:** INI-002, INI-006, INI-013
-- **Aprendizaje:** Dos campos de igualdad combined en un mismo documento (sector + etapa) y uso del indice ix_sector_etapa.
+- **Aprendizaje:** Dos campos de igualdad combinados en un mismo documento (sector + etapa) y uso del indice ix_sector_etapa.
 
 ```
 {

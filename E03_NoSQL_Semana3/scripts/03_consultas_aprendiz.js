@@ -55,7 +55,7 @@ const consultas = [
     orden: { _id: 1 },
     esperado: 3,
     idsEsperados: ['INI-002', 'INI-006', 'INI-013'],
-    aprendizaje: 'Dos campos de igualdad combined en un mismo documento (sector + etapa) y uso del indice ix_sector_etapa.'
+    aprendizaje: 'Dos campos de igualdad combinados en un mismo documento (sector + etapa) y uso del indice ix_sector_etapa.'
   },
   {
     id: 'C02',
@@ -214,7 +214,7 @@ const agruparPorCampo = (coleccion, campo) => {
 };
 
 const c07 = agruparPorCampo(EMPR, 'canal_preferido');
-print('  channel_preferido con valor : ' + c07.conValor + '  (esperado 5)');
+print('  canal_preferido con valor : ' + c07.conValor + '  (esperado 5)');
 print('  canal_preferido en null      : ' + c07.conNull + '  (esperado 3)');
 print('  canal_preferido ausente      : ' + c07.ausente + '  (esperado 2)');
 print('  Nota: {campo: null} tambien trae los ausentes; por eso se usa $type: "null" y $exists: false.');

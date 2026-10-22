@@ -9,7 +9,7 @@
 | Dataset de la semilla | `S03_UE_V1` |
 | Marca de documentos temporales | `S03_UE_V1_TMP` |
 | Prefijo de los _id temporales | `TMP-E03-` |
-| Fecha de ejecucion | 2026-10-21T15:51:37.308Z |
+| Fecha de ejecucion | 2026-10-22T12:15:17.846Z |
 | Errores | 0 |
 
 ## 1. Resumen por coleccion
@@ -24,11 +24,11 @@ Un delta de 0 y un residuo temporal de 0 demuestran que la demostracion CRUD no 
 
 ## 2. Detalle de las operaciones
 
-### s03_emprendedores  (`TMP-E03-mviai5x6-emprendedores`)
+### s03_emprendedores  (`TMP-E03-mvji7tkm-emprendedores`)
 
 **CREATE (insertOne)**
 
-- acknowledged=true  insertedId=TMP-E03-mviai5x6-emprendedores
+- acknowledged=true  insertedId=TMP-E03-mvji7tkm-emprendedores
 
 ```
 documento insertado:
@@ -43,7 +43,7 @@ documento insertado:
   "departamento": "Cundinamarca",
   "municipio": "Fusagasuga",
   "fecha_registro": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "nivel_madurez": "idea",
   "activo": true,
@@ -51,10 +51,10 @@ documento insertado:
   "etiquetas": [
     "temporal"
   ],
-  "_id": "TMP-E03-mviai5x6-emprendedores",
+  "_id": "TMP-E03-mvji7tkm-emprendedores",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -64,7 +64,7 @@ documento insertado:
 
 ```
 {
-  "_id": "TMP-E03-mviai5x6-emprendedores",
+  "_id": "TMP-E03-mvji7tkm-emprendedores",
   "tipo_documento": "CC",
   "numero_documento": "0000000000",
   "nombres": "Documento",
@@ -75,7 +75,7 @@ documento insertado:
   "departamento": "Cundinamarca",
   "municipio": "Fusagasuga",
   "fecha_registro": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "nivel_madurez": "idea",
   "activo": true,
@@ -85,7 +85,7 @@ documento insertado:
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -94,17 +94,17 @@ documento insertado:
 - matchedCount=1  modifiedCount=1  upsertedId=undefined
 
 ```
-filtro   : { _id: "TMP-E03-mviai5x6-emprendedores", dataset_id: "S03_UE_V1_TMP" }
+filtro   : { _id: "TMP-E03-mvji7tkm-emprendedores", dataset_id: "S03_UE_V1_TMP" }
 actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date> }, $inc: { "demo.version": 1 } }
 ```
 
 **READ #2 (findOne por _id, despues del update)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.347Z"},"estado":"actualizado","version":1}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:17.937Z"},"estado":"actualizado","version":1}
 
 ```
 {
-  "_id": "TMP-E03-mviai5x6-emprendedores",
+  "_id": "TMP-E03-mvji7tkm-emprendedores",
   "tipo_documento": "CC",
   "numero_documento": "0000000000",
   "nombres": "Documento",
@@ -115,7 +115,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "departamento": "Cundinamarca",
   "municipio": "Fusagasuga",
   "fecha_registro": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "nivel_madurez": "idea",
   "activo": true,
@@ -125,10 +125,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.347Z"
+      "$date": "2026-10-22T12:15:17.937Z"
     },
     "estado": "actualizado",
     "version": 1
@@ -142,7 +142,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 ```
 {
-  "_id": "TMP-E03-mviai5x6-emprendedores",
+  "_id": "TMP-E03-mvji7tkm-emprendedores",
   "tipo_documento": "CC",
   "numero_documento": "0000000000",
   "nombres": "Documento",
@@ -153,7 +153,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "departamento": "Cundinamarca",
   "municipio": "Fusagasuga",
   "fecha_registro": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "nivel_madurez": "idea",
   "activo": true,
@@ -163,10 +163,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.347Z"
+      "$date": "2026-10-22T12:15:17.937Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -176,11 +176,11 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 **READ #3 (findOne, verificacion del update atomico)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.347Z"},"estado":"actualizado_atomico","version":2}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:17.937Z"},"estado":"actualizado_atomico","version":2}
 
 ```
 {
-  "_id": "TMP-E03-mviai5x6-emprendedores",
+  "_id": "TMP-E03-mvji7tkm-emprendedores",
   "tipo_documento": "CC",
   "numero_documento": "0000000000",
   "nombres": "Documento",
@@ -191,7 +191,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "departamento": "Cundinamarca",
   "municipio": "Fusagasuga",
   "fecha_registro": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "nivel_madurez": "idea",
   "activo": true,
@@ -201,10 +201,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.347Z"
+      "$date": "2026-10-22T12:15:17.937Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -217,7 +217,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 - acknowledged=true  deletedCount=1
 
 ```
-filtro: { _id: "TMP-E03-mviai5x6-emprendedores", dataset_id: "S03_UE_V1_TMP" }
+filtro: { _id: "TMP-E03-mvji7tkm-emprendedores", dataset_id: "S03_UE_V1_TMP" }
 ```
 
 **READ #4 (findOne, comprobacion del borrado)**
@@ -232,11 +232,11 @@ filtro: { _id: "TMP-E03-mviai5x6-emprendedores", dataset_id: "S03_UE_V1_TMP" }
 
 - antes=10  despues=10  delta=0  (delta 0 = la coleccion quedo como estaba)
 
-### s03_iniciativas  (`TMP-E03-mviai5y0-iniciativas`)
+### s03_iniciativas  (`TMP-E03-mvji7tmr-iniciativas`)
 
 **CREATE (insertOne)**
 
-- acknowledged=true  insertedId=TMP-E03-mviai5y0-iniciativas
+- acknowledged=true  insertedId=TMP-E03-mvji7tmr-iniciativas
 
 ```
 documento insertado:
@@ -251,7 +251,7 @@ documento insertado:
     "web"
   ],
   "fecha_creacion": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "presupuesto": 1000000,
   "mentor": null,
@@ -263,16 +263,16 @@ documento insertado:
       "etapa": "idea",
       "sector": "tecnologia",
       "fecha": {
-        "$date": "2026-10-21T15:51:37.308Z"
+        "$date": "2026-10-22T12:15:17.846Z"
       },
       "responsable": "EMP-001",
       "nota": "Documento temporal de demostracion CRUD"
     }
   ],
-  "_id": "TMP-E03-mviai5y0-iniciativas",
+  "_id": "TMP-E03-mvji7tmr-iniciativas",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -282,7 +282,7 @@ documento insertado:
 
 ```
 {
-  "_id": "TMP-E03-mviai5y0-iniciativas",
+  "_id": "TMP-E03-mvji7tmr-iniciativas",
   "emprendedor_id": "EMP-001",
   "nombre": "Iniciativa Temporal E03",
   "sector": "tecnologia",
@@ -293,7 +293,7 @@ documento insertado:
     "web"
   ],
   "fecha_creacion": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "presupuesto": 1000000,
   "mentor": null,
@@ -305,7 +305,7 @@ documento insertado:
       "etapa": "idea",
       "sector": "tecnologia",
       "fecha": {
-        "$date": "2026-10-21T15:51:37.308Z"
+        "$date": "2026-10-22T12:15:17.846Z"
       },
       "responsable": "EMP-001",
       "nota": "Documento temporal de demostracion CRUD"
@@ -313,7 +313,7 @@ documento insertado:
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -322,17 +322,17 @@ documento insertado:
 - matchedCount=1  modifiedCount=1  upsertedId=undefined
 
 ```
-filtro   : { _id: "TMP-E03-mviai5y0-iniciativas", dataset_id: "S03_UE_V1_TMP" }
+filtro   : { _id: "TMP-E03-mvji7tmr-iniciativas", dataset_id: "S03_UE_V1_TMP" }
 actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date> }, $inc: { "demo.version": 1 } }
 ```
 
 **READ #2 (findOne por _id, despues del update)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.374Z"},"estado":"actualizado","version":1}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:17.961Z"},"estado":"actualizado","version":1}
 
 ```
 {
-  "_id": "TMP-E03-mviai5y0-iniciativas",
+  "_id": "TMP-E03-mvji7tmr-iniciativas",
   "emprendedor_id": "EMP-001",
   "nombre": "Iniciativa Temporal E03",
   "sector": "tecnologia",
@@ -343,7 +343,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
     "web"
   ],
   "fecha_creacion": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "presupuesto": 1000000,
   "mentor": null,
@@ -355,7 +355,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
       "etapa": "idea",
       "sector": "tecnologia",
       "fecha": {
-        "$date": "2026-10-21T15:51:37.308Z"
+        "$date": "2026-10-22T12:15:17.846Z"
       },
       "responsable": "EMP-001",
       "nota": "Documento temporal de demostracion CRUD"
@@ -363,10 +363,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.374Z"
+      "$date": "2026-10-22T12:15:17.961Z"
     },
     "estado": "actualizado",
     "version": 1
@@ -380,7 +380,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 ```
 {
-  "_id": "TMP-E03-mviai5y0-iniciativas",
+  "_id": "TMP-E03-mvji7tmr-iniciativas",
   "emprendedor_id": "EMP-001",
   "nombre": "Iniciativa Temporal E03",
   "sector": "tecnologia",
@@ -391,7 +391,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
     "web"
   ],
   "fecha_creacion": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "presupuesto": 1000000,
   "mentor": null,
@@ -403,7 +403,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
       "etapa": "idea",
       "sector": "tecnologia",
       "fecha": {
-        "$date": "2026-10-21T15:51:37.308Z"
+        "$date": "2026-10-22T12:15:17.846Z"
       },
       "responsable": "EMP-001",
       "nota": "Documento temporal de demostracion CRUD"
@@ -411,10 +411,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.374Z"
+      "$date": "2026-10-22T12:15:17.961Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -424,11 +424,11 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 **READ #3 (findOne, verificacion del update atomico)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.374Z"},"estado":"actualizado_atomico","version":2}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:17.961Z"},"estado":"actualizado_atomico","version":2}
 
 ```
 {
-  "_id": "TMP-E03-mviai5y0-iniciativas",
+  "_id": "TMP-E03-mvji7tmr-iniciativas",
   "emprendedor_id": "EMP-001",
   "nombre": "Iniciativa Temporal E03",
   "sector": "tecnologia",
@@ -439,7 +439,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
     "web"
   ],
   "fecha_creacion": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "presupuesto": 1000000,
   "mentor": null,
@@ -451,7 +451,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
       "etapa": "idea",
       "sector": "tecnologia",
       "fecha": {
-        "$date": "2026-10-21T15:51:37.308Z"
+        "$date": "2026-10-22T12:15:17.846Z"
       },
       "responsable": "EMP-001",
       "nota": "Documento temporal de demostracion CRUD"
@@ -459,10 +459,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   ],
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.374Z"
+      "$date": "2026-10-22T12:15:17.961Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -475,7 +475,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 - acknowledged=true  deletedCount=1
 
 ```
-filtro: { _id: "TMP-E03-mviai5y0-iniciativas", dataset_id: "S03_UE_V1_TMP" }
+filtro: { _id: "TMP-E03-mvji7tmr-iniciativas", dataset_id: "S03_UE_V1_TMP" }
 ```
 
 **READ #4 (findOne, comprobacion del borrado)**
@@ -490,11 +490,11 @@ filtro: { _id: "TMP-E03-mviai5y0-iniciativas", dataset_id: "S03_UE_V1_TMP" }
 
 - antes=15  despues=15  delta=0  (delta 0 = la coleccion quedo como estaba)
 
-### s03_asesorias  (`TMP-E03-mviai5yl-asesorias`)
+### s03_asesorias  (`TMP-E03-mvji7tnf-asesorias`)
 
 **CREATE (insertOne)**
 
-- acknowledged=true  insertedId=TMP-E03-mviai5yl-asesorias
+- acknowledged=true  insertedId=TMP-E03-mvji7tnf-asesorias
 
 ```
 documento insertado:
@@ -505,17 +505,17 @@ documento insertado:
   "estado": "programada",
   "modalidad": "virtual",
   "fecha_programada": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "fecha_realizacion": null,
   "asesor": "Asesor Temporal",
   "duracion_minutos": 60,
   "costo": null,
   "canal_contacto": "email",
-  "_id": "TMP-E03-mviai5yl-asesorias",
+  "_id": "TMP-E03-mvji7tnf-asesorias",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -525,14 +525,14 @@ documento insertado:
 
 ```
 {
-  "_id": "TMP-E03-mviai5yl-asesorias",
+  "_id": "TMP-E03-mvji7tnf-asesorias",
   "iniciativa_id": "INI-001",
   "sector": "alimentos",
   "tipo": "capacitacion",
   "estado": "programada",
   "modalidad": "virtual",
   "fecha_programada": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "fecha_realizacion": null,
   "asesor": "Asesor Temporal",
@@ -541,7 +541,7 @@ documento insertado:
   "canal_contacto": "email",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z"
+  "creado_por_demo": "2026-10-22T12:15:17.846Z"
 }
 ```
 
@@ -550,24 +550,24 @@ documento insertado:
 - matchedCount=1  modifiedCount=1  upsertedId=undefined
 
 ```
-filtro   : { _id: "TMP-E03-mviai5yl-asesorias", dataset_id: "S03_UE_V1_TMP" }
+filtro   : { _id: "TMP-E03-mvji7tnf-asesorias", dataset_id: "S03_UE_V1_TMP" }
 actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date> }, $inc: { "demo.version": 1 } }
 ```
 
 **READ #2 (findOne por _id, despues del update)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.394Z"},"estado":"actualizado","version":1}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:18.007Z"},"estado":"actualizado","version":1}
 
 ```
 {
-  "_id": "TMP-E03-mviai5yl-asesorias",
+  "_id": "TMP-E03-mvji7tnf-asesorias",
   "iniciativa_id": "INI-001",
   "sector": "alimentos",
   "tipo": "capacitacion",
   "estado": "programada",
   "modalidad": "virtual",
   "fecha_programada": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "fecha_realizacion": null,
   "asesor": "Asesor Temporal",
@@ -576,10 +576,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "canal_contacto": "email",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.394Z"
+      "$date": "2026-10-22T12:15:18.007Z"
     },
     "estado": "actualizado",
     "version": 1
@@ -593,14 +593,14 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 ```
 {
-  "_id": "TMP-E03-mviai5yl-asesorias",
+  "_id": "TMP-E03-mvji7tnf-asesorias",
   "iniciativa_id": "INI-001",
   "sector": "alimentos",
   "tipo": "capacitacion",
   "estado": "programada",
   "modalidad": "virtual",
   "fecha_programada": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "fecha_realizacion": null,
   "asesor": "Asesor Temporal",
@@ -609,10 +609,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "canal_contacto": "email",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.394Z"
+      "$date": "2026-10-22T12:15:18.007Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -622,18 +622,18 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 
 **READ #3 (findOne, verificacion del update atomico)**
 
-- campo demo: {"actualizado_en":{"$date":"2026-10-21T15:51:37.394Z"},"estado":"actualizado_atomico","version":2}
+- campo demo: {"actualizado_en":{"$date":"2026-10-22T12:15:18.007Z"},"estado":"actualizado_atomico","version":2}
 
 ```
 {
-  "_id": "TMP-E03-mviai5yl-asesorias",
+  "_id": "TMP-E03-mvji7tnf-asesorias",
   "iniciativa_id": "INI-001",
   "sector": "alimentos",
   "tipo": "capacitacion",
   "estado": "programada",
   "modalidad": "virtual",
   "fecha_programada": {
-    "$date": "2026-10-21T15:51:37.308Z"
+    "$date": "2026-10-22T12:15:17.846Z"
   },
   "fecha_realizacion": null,
   "asesor": "Asesor Temporal",
@@ -642,10 +642,10 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
   "canal_contacto": "email",
   "dataset_id": "S03_UE_V1_TMP",
   "esquema_version": "1.1",
-  "creado_por_demo": "2026-10-21T15:51:37.308Z",
+  "creado_por_demo": "2026-10-22T12:15:17.846Z",
   "demo": {
     "actualizado_en": {
-      "$date": "2026-10-21T15:51:37.394Z"
+      "$date": "2026-10-22T12:15:18.007Z"
     },
     "estado": "actualizado_atomico",
     "version": 2
@@ -658,7 +658,7 @@ actualiz.: { $set: { "demo.estado": "actualizado", "demo.actualizado_en": <Date>
 - acknowledged=true  deletedCount=1
 
 ```
-filtro: { _id: "TMP-E03-mviai5yl-asesorias", dataset_id: "S03_UE_V1_TMP" }
+filtro: { _id: "TMP-E03-mvji7tnf-asesorias", dataset_id: "S03_UE_V1_TMP" }
 ```
 
 **READ #4 (findOne, comprobacion del borrado)**
@@ -687,7 +687,7 @@ Operacion bloqueada: "INI-001" pertenece a la semilla y no se puede modificar.
 
 ```
 INFO Base de trabajo: emprendimiento_sena_lab
-INFO Marca de tiempo de la ejecucion: 2026-10-21T15:51:37.308Z
+INFO Marca de tiempo de la ejecucion: 2026-10-22T12:15:17.846Z
 INFO Dataset de trabajo: S03_UE_V1  |  documentos temporales: S03_UE_V1_TMP
 INFO s03_emprendedores: 10 documentos antes de la demostracion.
 INFO s03_iniciativas: 15 documentos antes de la demostracion.
