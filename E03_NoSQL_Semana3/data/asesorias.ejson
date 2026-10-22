@@ -1,0 +1,683 @@
+[
+  {
+    "_id": "ASE-001",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-001",
+    "emprendedor_id": "EMP-001",
+    "sector": "alimentos",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-08T09:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-10T15:30:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Laura Restrepo",
+    "asesor_id": "ADV-01",
+    "duracion_minutos": 120,
+    "costo": 480000,
+    "resultado": "parcial",
+    "observaciones": "Taller de formulacion de indicadores de ventas"
+  },
+  {
+    "_id": "ASE-002",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-002",
+    "emprendedor_id": "EMP-002",
+    "sector": "tecnologia",
+    "tipo": "mentoria",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-09-14T14:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-16T10:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Andres Villamil",
+    "asesor_id": "ADV-02",
+    "duracion_minutos": 120,
+    "costo": 600000,
+    "resultado": "satisfactorio",
+    "observaciones": "Acompanamiento en la arquitectura del marketplace"
+  },
+  {
+    "_id": "ASE-003",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-003",
+    "emprendedor_id": "EMP-003",
+    "sector": "economia_circular",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-08-25T08:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-08-27T13:00:00.000Z"
+    },
+    "canal_contacto": null,
+    "asesor": "Julian Ospina",
+    "asesor_id": "ADV-03",
+    "duracion_minutos": 180,
+    "costo": 750000,
+    "resultado": "satisfactorio",
+    "observaciones": "Taller de trazabilidad para exportacion de cacao"
+  },
+  {
+    "_id": "ASE-004",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-004",
+    "emprendedor_id": "EMP-004",
+    "sector": "turismo",
+    "tipo": "diagnostico",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-08-11T09:30:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-08-13T15:00:00.000Z"
+    },
+    "canal_contacto": "telefono",
+    "asesor": "Marta Quintero",
+    "asesor_id": "ADV-04",
+    "duracion_minutos": 60,
+    "costo": 300000,
+    "resultado": "parcial",
+    "observaciones": "Revision de la oferta de hospedaje rural"
+  },
+  {
+    "_id": "ASE-005",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-005",
+    "emprendedor_id": "EMP-005",
+    "sector": "economia_circular",
+    "tipo": "legal",
+    "estado": "cancelada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-01T10:00:00.000Z"
+    },
+    "asesor": "Camila Rojas",
+    "asesor_id": "ADV-09",
+    "duracion_minutos": 90,
+    "observaciones": "Cancelada a solicitud del emprendedor por costo de la asesoria juridica",
+    "motivo_cancelacion": "Cancelada a solicitud del emprendedor por costo de la asesoria juridica"
+  },
+  {
+    "_id": "ASE-006",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-006",
+    "emprendedor_id": "EMP-001",
+    "sector": "tecnologia",
+    "tipo": "acompanamiento_tecnico",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-22T08:30:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-24T16:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Oscar Pelaez",
+    "asesor_id": "ADV-05",
+    "duracion_minutos": 150,
+    "costo": 520000,
+    "resultado": "satisfactorio",
+    "observaciones": "Optimizacion de rutas de reparto y trazabilidad"
+  },
+  {
+    "_id": "ASE-007",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-007",
+    "emprendedor_id": "EMP-006",
+    "sector": "alimentos",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-10-02T09:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-10-05T14:00:00.000Z"
+    },
+    "canal_contacto": null,
+    "asesor": "Sara Montoya",
+    "asesor_id": "ADV-07",
+    "duracion_minutos": 120,
+    "costo": 400000,
+    "resultado": "parcial"
+  },
+  {
+    "_id": "ASE-008",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-008",
+    "emprendedor_id": "EMP-007",
+    "sector": "tecnologia",
+    "tipo": "mentoria",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-09-05T10:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-08T09:30:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Andres Villamil",
+    "asesor_id": "ADV-02",
+    "duracion_minutos": 120,
+    "costo": 600000,
+    "resultado": "satisfactorio",
+    "observaciones": "Sesion de cierre del piloto de inventario"
+  },
+  {
+    "_id": "ASE-009",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-009",
+    "emprendedor_id": "EMP-008",
+    "sector": "economia_circular",
+    "tipo": "diagnostico",
+    "estado": "realizada",
+    "modalidad": "telefonica",
+    "fecha_programada": {
+      "$date": "2026-07-18T11:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-07-20T17:20:00.000Z"
+    },
+    "canal_contacto": "telefono",
+    "asesor": "Paula Cepeda",
+    "asesor_id": "ADV-08",
+    "duracion_minutos": 45,
+    "costo": 250000,
+    "resultado": "parcial",
+    "observaciones": "Diagnostico rapido de la comercializacion de cafe de finca"
+  },
+  {
+    "_id": "ASE-010",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-010",
+    "emprendedor_id": "EMP-009",
+    "sector": "turismo",
+    "tipo": "mercadeo",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-09-12T08:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-15T11:30:00.000Z"
+    },
+    "canal_contacto": "web",
+    "asesor": "Felipe Cardona",
+    "asesor_id": "ADV-06",
+    "duracion_minutos": 90,
+    "costo": 420000,
+    "resultado": "satisfactorio",
+    "observaciones": "Campana de difusion para la temporada de termas"
+  },
+  {
+    "_id": "ASE-011",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-008",
+    "emprendedor_id": "EMP-007",
+    "sector": "tecnologia",
+    "tipo": "mentoria",
+    "estado": "programada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-10-06T10:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "email",
+    "asesor": "Andres Villamil",
+    "asesor_id": "ADV-02",
+    "duracion_minutos": 120,
+    "costo": null,
+    "observaciones": "Sesion de reorientacion posterior al archivamiento de la iniciativa"
+  },
+  {
+    "_id": "ASE-012",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-003",
+    "emprendedor_id": "EMP-003",
+    "sector": "economia_circular",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-03T08:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-05T15:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Julian Ospina",
+    "asesor_id": "ADV-03",
+    "duracion_minutos": 180,
+    "costo": 750000,
+    "resultado": "satisfactorio",
+    "observaciones": "Taller de costos de empaque para cacao"
+  },
+  {
+    "_id": "ASE-013",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-003",
+    "emprendedor_id": "EMP-003",
+    "sector": "economia_circular",
+    "tipo": "capacitacion",
+    "estado": "programada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-10-14T08:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": null,
+    "asesor": "Sara Montoya",
+    "asesor_id": "ADV-07",
+    "duracion_minutos": 180,
+    "costo": null,
+    "observaciones": "Taller de certificacion para exportacion"
+  },
+  {
+    "_id": "ASE-014",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-004",
+    "emprendedor_id": "EMP-004",
+    "sector": "turismo",
+    "tipo": "mentoria",
+    "estado": "programada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-10-20T14:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "email",
+    "asesor": "Felipe Cardona",
+    "asesor_id": "ADV-06",
+    "duracion_minutos": 120,
+    "costo": null,
+    "observaciones": "Mentoria en el diseno de experiencias turisticas"
+  },
+  {
+    "_id": "ASE-015",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-005",
+    "emprendedor_id": "EMP-005",
+    "sector": "economia_circular",
+    "tipo": "diagnostico",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-09T09:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-11T16:30:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Marta Quintero",
+    "asesor_id": "ADV-04",
+    "duracion_minutos": 60,
+    "costo": 300000,
+    "resultado": "parcial",
+    "observaciones": "Evaluacion de la ventaja competitiva en textiles"
+  },
+  {
+    "_id": "ASE-016",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-006",
+    "emprendedor_id": "EMP-001",
+    "sector": "tecnologia",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-17T08:30:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-19T15:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Oscar Pelaez",
+    "asesor_id": "ADV-05",
+    "duracion_minutos": 150,
+    "costo": 520000,
+    "resultado": "satisfactorio"
+  },
+  {
+    "_id": "ASE-017",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-011",
+    "emprendedor_id": "EMP-010",
+    "sector": "economia_circular",
+    "tipo": "acompanamiento_tecnico",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-21T10:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-23T17:00:00.000Z"
+    },
+    "canal_contacto": "telefono",
+    "asesor": "Paula Cepeda",
+    "asesor_id": "ADV-08",
+    "duracion_minutos": 150,
+    "costo": 520000,
+    "resultado": "satisfactorio",
+    "observaciones": "Acompanamiento en la migracion del catalogo digital"
+  },
+  {
+    "_id": "ASE-018",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-013",
+    "emprendedor_id": "EMP-003",
+    "sector": "tecnologia",
+    "tipo": "mentoria",
+    "estado": "programada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-10-27T09:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "email",
+    "asesor": "Andres Villamil",
+    "asesor_id": "ADV-02",
+    "duracion_minutos": 120,
+    "costo": null,
+    "observaciones": "Mentoria en la arquitectura del sistema de sorteos"
+  },
+  {
+    "_id": "ASE-019",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-012",
+    "emprendedor_id": "EMP-002",
+    "sector": "alimentos",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-09-25T09:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-29T15:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Sara Montoya",
+    "asesor_id": "ADV-07",
+    "duracion_minutos": 120,
+    "costo": 400000,
+    "resultado": "satisfactorio",
+    "observaciones": "Taller de costos de panificacion"
+  },
+  {
+    "_id": "ASE-020",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-010",
+    "emprendedor_id": "EMP-009",
+    "sector": "turismo",
+    "tipo": "mercadeo",
+    "estado": "realizada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-09-28T08:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-30T12:00:00.000Z"
+    },
+    "canal_contacto": null,
+    "asesor": "Felipe Cardona",
+    "asesor_id": "ADV-06",
+    "duracion_minutos": 90,
+    "costo": 420000,
+    "resultado": "no_satisfactorio",
+    "observaciones": "Actividad con baja participacion de visitantes"
+  },
+  {
+    "_id": "ASE-021",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-015",
+    "emprendedor_id": "EMP-005",
+    "sector": "economia_circular",
+    "tipo": "legal",
+    "estado": "programada",
+    "modalidad": "telefonica",
+    "fecha_programada": {
+      "$date": "2026-11-03T10:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "asesor": "Camila Rojas",
+    "asesor_id": "ADV-09",
+    "duracion_minutos": 90,
+    "costo": null,
+    "observaciones": "Acompanamiento en tramites de pesca artesanal"
+  },
+  {
+    "_id": "ASE-022",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-009",
+    "emprendedor_id": "EMP-008",
+    "sector": "economia_circular",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-07T08:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-09T14:30:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Julian Ospina",
+    "asesor_id": "ADV-03",
+    "duracion_minutos": 180,
+    "costo": 750000,
+    "resultado": "satisfactorio",
+    "observaciones": "Taller de modelo de suscripcion de cafe"
+  },
+  {
+    "_id": "ASE-023",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-012",
+    "emprendedor_id": "EMP-002",
+    "sector": "alimentos",
+    "tipo": "acompanamiento_tecnico",
+    "estado": "programada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-10-09T09:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "telefono",
+    "asesor": "Oscar Pelaez",
+    "asesor_id": "ADV-05",
+    "duracion_minutos": 150,
+    "costo": null,
+    "observaciones": "Acompanamiento en la estandarizacion del proceso de horneado"
+  },
+  {
+    "_id": "ASE-024",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-013",
+    "emprendedor_id": "EMP-003",
+    "sector": "tecnologia",
+    "tipo": "financiacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-11T10:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-15T16:00:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Camila Rojas",
+    "asesor_id": "ADV-09",
+    "duracion_minutos": 90,
+    "costo": 450000,
+    "resultado": "satisfactorio",
+    "observaciones": "Estructuracion de la linea de credito"
+  },
+  {
+    "_id": "ASE-025",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-011",
+    "emprendedor_id": "EMP-010",
+    "sector": "economia_circular",
+    "tipo": "capacitacion",
+    "estado": "realizada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-09-18T08:30:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-09-22T15:30:00.000Z"
+    },
+    "canal_contacto": "email",
+    "asesor": "Sara Montoya",
+    "asesor_id": "ADV-07",
+    "duracion_minutos": 120,
+    "costo": 400000,
+    "resultado": "satisfactorio",
+    "observaciones": "Taller de gestion de catalogos digitales"
+  },
+  {
+    "_id": "ASE-026",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-014",
+    "emprendedor_id": "EMP-004",
+    "sector": "turismo",
+    "tipo": "capacitacion",
+    "estado": "programada",
+    "modalidad": "presencial",
+    "fecha_programada": {
+      "$date": "2026-10-30T14:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "web",
+    "asesor": "Felipe Cardona",
+    "asesor_id": "ADV-06",
+    "duracion_minutos": 120,
+    "costo": null,
+    "observaciones": "Taller de hospitalidad rural"
+  },
+  {
+    "_id": "ASE-027",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-009",
+    "emprendedor_id": "EMP-008",
+    "sector": "economia_circular",
+    "tipo": "diagnostico",
+    "estado": "realizada",
+    "modalidad": "telefonica",
+    "fecha_programada": {
+      "$date": "2026-06-11T09:00:00.000Z"
+    },
+    "fecha_realizacion": {
+      "$date": "2026-06-13T11:00:00.000Z"
+    },
+    "canal_contacto": null,
+    "asesor": "Paula Cepeda",
+    "asesor_id": "ADV-08",
+    "duracion_minutos": 45,
+    "costo": 250000,
+    "resultado": "parcial",
+    "observaciones": "Diagnostico inicial de la finca cafetera"
+  },
+  {
+    "_id": "ASE-028",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-001",
+    "emprendedor_id": "EMP-001",
+    "sector": "economia_circular",
+    "tipo": "mentoria",
+    "estado": "reprogramada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-11-12T09:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "email",
+    "asesor": "Laura Restrepo",
+    "asesor_id": "ADV-01",
+    "duracion_minutos": 120,
+    "costo": null,
+    "observaciones": "Reprogramada por disponibilidad del mentor asignado",
+    "motivo_reprogramacion": "Reprogramada por disponibilidad del mentor asignado"
+  },
+  {
+    "_id": "ASE-029",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-015",
+    "emprendedor_id": "EMP-005",
+    "sector": "economia_circular",
+    "tipo": "financiacion",
+    "estado": "programada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-11-18T10:00:00.000Z"
+    },
+    "fecha_realizacion": null,
+    "canal_contacto": "email",
+    "asesor": "Camila Rojas",
+    "asesor_id": "ADV-09",
+    "duracion_minutos": 90,
+    "costo": null,
+    "observaciones": "Estructuracion de la linea de credito para pesca artesanal"
+  },
+  {
+    "_id": "ASE-030",
+    "dataset_id": "S03_UE_V1",
+    "esquema_version": "1.1",
+    "iniciativa_id": "INI-012",
+    "emprendedor_id": "EMP-002",
+    "sector": "alimentos",
+    "tipo": "capacitacion",
+    "estado": "cancelada",
+    "modalidad": "virtual",
+    "fecha_programada": {
+      "$date": "2026-10-08T08:00:00.000Z"
+    },
+    "asesor": "Sara Montoya",
+    "asesor_id": "ADV-07",
+    "duracion_minutos": 120,
+    "observaciones": "Cancelada por reasignacion de agenda del asesor",
+    "motivo_cancelacion": "Cancelada por reasignacion de agenda del asesor"
+  }
+]
