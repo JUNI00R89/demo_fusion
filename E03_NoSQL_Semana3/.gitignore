@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------------
+# E03 - Bases de Datos NoSQL (Semana 3)
+# ---------------------------------------------------------------------------
+# La carpeta .lab/ contiene la instancia MongoDB del laboratorio (dbPath,
+# log de mongod y el archivo con la contrasena de practica). NUNCA debe
+# versionarse: es codigo ejecutable del proyecto y un secreto.
+# El control V-18 de scripts/04_verificar_base.js comprueba que la
+# contrasena no aparezca en ningun archivo del entregable.
+# ---------------------------------------------------------------------------
+.lab/
+*.log
+
+# Credenciales y material sensible (por si alguien las deja caer en otra carpeta)
+password.txt
+passwords.txt
+credenciales.txt
+*.pem
+*.key
+.env
+.env.*
+
+# Node / npm
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json.bak
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Sistema de archivos de MongoDB (por si el dbPath se mueve)
+*.wt
+journal/
+WiredTiger/
+diagnostic.data/
+mongo.lock
+
+# Salidas temporales
+*.tmp
+*.bak
+*.orig
+tmp/
+temp/
