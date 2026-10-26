@@ -1,4 +1,5 @@
 import type { Product, Supplier } from '../utils/mockData';
+import { desktop, isDesktopMode } from './desktop';
 
 export type SaleStatus = 'completed' | 'pending' | 'cancelled';
 export type PaymentMethod = 'cash' | 'card' | 'digital' | 'split' | 'transfer';
@@ -104,6 +105,8 @@ export interface OrderRecord {
   total: number;
   created_at: string;
   items: OrderItemRecord[];
+  tableId?: string | null;
+  tableNumber?: number | null;
 }
 
 export interface CreateOrderInput {
@@ -113,6 +116,8 @@ export interface CreateOrderInput {
   address?: string;
   notes?: string;
   items: { productId: string; quantity: number; notes?: string }[];
+  tableId?: string | null;
+  tableNumber?: number | null;
 }
 
 export interface AuditLogRecord {
@@ -176,6 +181,9 @@ class ApiError extends Error {
 }
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
+  // La app de escritorio no levanta FastAPI: todo se resuelve con el paquete
+  // local. Lanzar TypeError permite que los métodos con respaldo local lo usen.
+  if (isDesktopMode()) throw new TypeError('Modo escritorio local: los datos viven en este equipo.');
   const response = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('manager_stock_auth_token') ? { Authorization: `Bearer ${localStorage.getItem('manager_stock_auth_token')}` } : {}), ...(init.headers || {}) },
@@ -211,20 +219,30 @@ export interface AuthResponse { access_token: string; token_type: 'bearer'; user
 
 export const authService = {
   login(email: string, password: string) {
+    if (isDesktopMode()) return desktop.auth.login(email, password);
     return api<AuthResponse>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
   },
   register(name: string, email: string, password: string) {
+    if (isDesktopMode()) return desktop.auth.register(name, email, password);
     return api<AuthResponse>('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) });
   },
-  me() { return api<AuthUser>('/auth/me'); },
-  logout() { return api<{ ok: boolean }>('/auth/logout', { method: 'POST' }); },
+  me() {
+    if (isDesktopMode()) return desktop.auth.me();
+    return api<AuthUser>('/auth/me');
+  },
+  logout() {
+    if (isDesktopMode()) return desktop.auth.logout();
+    return api<{ ok: boolean }>('/auth/logout', { method: 'POST' });
+  },
 };
 
 export async function getBusinessConfig<T>(): Promise<T | null> {
+  if (isDesktopMode()) return desktop.config.get<T>();
   return api<T | null>('/business/config');
 }
 
 export async function saveBusinessConfig<T>(config: T): Promise<T> {
+  if (isDesktopMode()) return desktop.config.save(config);
   return api<T>('/business/config', { method: 'PUT', body: JSON.stringify(config) });
 }
 
@@ -232,9 +250,11 @@ export interface ProductCategoryRecord {
   id: string; name: string; description: string; active: boolean; custom: boolean; createdAt?: string | null;
 }
 export async function getProductCategories() {
+  if (isDesktopMode()) return desktop.categories.list();
   return api<ProductCategoryRecord[]>('/product-categories');
 }
 export async function createProductCategory(payload: { name: string; description?: string; active?: boolean }) {
+  if (isDesktopMode()) return desktop.categories.create(payload);
   return api<ProductCategoryRecord>('/product-categories', { method: 'POST', body: JSON.stringify(payload) });
 }
 
@@ -243,9 +263,14 @@ export interface BusinessTypeTransitionRecord {
   createdAt: string; expiresAt: string; status: 'pending'; pendingModules: string[]; message: string;
 }
 export async function getBusinessTypeTransitions() {
+  if (isDesktopMode()) return [] as BusinessTypeTransitionRecord[];
   return api<BusinessTypeTransitionRecord[]>('/business/type-transitions');
 }
 export async function restoreBusinessTypeTransition(id: string) {
+  if (isDesktopMode()) {
+    const config = await getBusinessConfig<import('../context/BusinessContext').BusinessConfig>();
+    return { ok: true, config: config as import('../context/BusinessContext').BusinessConfig };
+  }
   return api<{ ok: boolean; config: import('../context/BusinessContext').BusinessConfig }>(`/business/type-transitions/${encodeURIComponent(id)}/restore`, { method: 'POST' });
 }
 
@@ -260,15 +285,24 @@ export interface HotelReservationRecord {
   id: string; roomId: string; roomNumber: string; guestName: string; guestEmail: string; guestPhone: string;
   checkIn: string; checkOut: string; status: HotelReservationStatus; advance: number; totalCharges: number; nights: number; createdAt: string;
 }
-export async function getHotelRooms() { return api<HotelRoomRecord[]>('/hotel/rooms'); }
+export async function getHotelRooms() {
+  if (isDesktopMode()) return desktop.hotel.rooms();
+  return api<HotelRoomRecord[]>('/hotel/rooms');
+}
 export async function createHotelRoom(input: Omit<HotelRoomRecord, 'id' | 'number' | 'roomNumber' | 'createdAt' | 'updatedAt'> & { roomNumber: string }) {
+  if (isDesktopMode()) return desktop.hotel.createRoom(input);
   return api<HotelRoomRecord>('/hotel/rooms', { method: 'POST', body: JSON.stringify(input) });
 }
-export async function getHotelReservations() { return api<HotelReservationRecord[]>('/hotel/reservations'); }
+export async function getHotelReservations() {
+  if (isDesktopMode()) return desktop.hotel.reservations();
+  return api<HotelReservationRecord[]>('/hotel/reservations');
+}
 export async function createHotelReservation(input: { roomId: string; guestName: string; guestEmail?: string; guestPhone?: string; checkIn: string; checkOut: string; advance?: number }) {
+  if (isDesktopMode()) return desktop.hotel.createReservation(input);
   return api<HotelReservationRecord>('/hotel/reservations', { method: 'POST', body: JSON.stringify(input) });
 }
 export async function updateHotelReservationStatus(id: string, status: HotelReservationStatus) {
+  if (isDesktopMode()) return desktop.hotel.updateReservationStatus(id, status);
   return api<HotelReservationRecord>(`/hotel/reservations/${encodeURIComponent(id)}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
 }
 
@@ -280,53 +314,82 @@ export interface ServiceAppointmentRecord {
   fecha: string; horaInicio: string; horaFin: string; estado: 'reserved' | 'confirmed' | 'attended' | 'cancelled' | 'no_show';
   notes: string; durationMinutes: number; price: number; createdAt: string;
 }
-export async function getServicesCatalog() { return api<ServiceCatalogRecord[]>('/services/catalog'); }
+export async function getServicesCatalog() {
+  if (isDesktopMode()) return desktop.services.catalog();
+  return api<ServiceCatalogRecord[]>('/services/catalog');
+}
 export async function createServiceCatalogItem(input: { name: string; durationMinutes: number; price: number; category?: string; color?: string }) {
+  if (isDesktopMode()) return desktop.services.createCatalogItem(input);
   return api<ServiceCatalogRecord>('/services/catalog', { method: 'POST', body: JSON.stringify(input) });
 }
-export async function getServiceProfessionals() { return api<ServiceProfessionalRecord[]>('/services/professionals'); }
+export async function getServiceProfessionals() {
+  if (isDesktopMode()) return desktop.services.professionals();
+  return api<ServiceProfessionalRecord[]>('/services/professionals');
+}
 export async function createServiceProfessional(input: { name: string; specialty?: string; color?: string; availability?: { dia?: number; inicio?: string; fin?: string }[] }) {
+  if (isDesktopMode()) return desktop.services.createProfessional(input);
   return api<ServiceProfessionalRecord>('/services/professionals', { method: 'POST', body: JSON.stringify(input) });
 }
 export async function getServiceAppointments(from?: string, to?: string) {
+  if (isDesktopMode()) return desktop.services.appointments();
   const query = new URLSearchParams(); if (from) query.set('from', from); if (to) query.set('to', to);
   return api<ServiceAppointmentRecord[]>(`/services/appointments${query.size ? `?${query.toString()}` : ''}`);
 }
 export async function createServiceAppointment(input: { serviceId: string; professionalId: string; clientName: string; clientEmail?: string; clientPhone?: string; appointmentDate: string; startTime: string; notes?: string }) {
+  if (isDesktopMode()) return desktop.services.createAppointment(input);
   return api<ServiceAppointmentRecord>('/services/appointments', { method: 'POST', body: JSON.stringify(input) });
 }
 export async function editServiceAppointment(id: string, input: { serviceId: string; professionalId: string; clientName: string; clientEmail?: string; clientPhone?: string; appointmentDate: string; startTime: string; notes?: string }) {
+  if (isDesktopMode()) return desktop.services.editAppointment(id, input);
   return api<ServiceAppointmentRecord>(`/services/appointments/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(input) });
 }
 export async function deleteServiceAppointment(id: string) {
+  if (isDesktopMode()) return desktop.services.deleteAppointment(id);
   return api<void>(`/services/appointments/${encodeURIComponent(id)}`, { method: 'DELETE' });
 }
 
 export async function updateServiceAppointmentStatus(id: string, status: ServiceAppointmentRecord['estado']) {
+  if (isDesktopMode()) return desktop.services.updateAppointmentStatus(id, status);
   return api<ServiceAppointmentRecord>(`/services/appointments/${encodeURIComponent(id)}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
 }
 
 export interface SubscriptionPlanRecord { id: 'free' | 'entrepreneur' | 'business' | 'enterprise'; name: string; priceCOP: number; maxUsers: number; maxProducts: number; }
 export interface BusinessSubscriptionRecord { businessId: string; plan: SubscriptionPlanRecord; status: 'active' | 'pending_payment' | 'expired' | 'cancelled'; pendingPlan: SubscriptionPlanRecord | null; startedAt: string | null; expiresAt: string | null; updatedAt: string | null; }
-export async function getSubscriptionPlans() { return api<SubscriptionPlanRecord[]>('/subscription/plans'); }
-export async function getBusinessSubscription() { return api<BusinessSubscriptionRecord>('/subscription'); }
-export async function selectSubscriptionPlan(planId: SubscriptionPlanRecord['id']) { return api<BusinessSubscriptionRecord>('/subscription', { method: 'PUT', body: JSON.stringify({ planId }) }); }
+export async function getSubscriptionPlans() {
+  if (isDesktopMode()) return desktop.subscription.plans();
+  return api<SubscriptionPlanRecord[]>('/subscription/plans');
+}
+export async function getBusinessSubscription() {
+  if (isDesktopMode()) return desktop.subscription.current();
+  return api<BusinessSubscriptionRecord>('/subscription');
+}
+export async function selectSubscriptionPlan(planId: SubscriptionPlanRecord['id']) {
+  if (isDesktopMode()) return desktop.subscription.select(planId);
+  return api<BusinessSubscriptionRecord>('/subscription', { method: 'PUT', body: JSON.stringify({ planId }) });
+}
 
 export interface PlatformSubscriptionRecord extends BusinessSubscriptionRecord { businessName: string; }
-export async function getPlatformSubscriptions() { return api<PlatformSubscriptionRecord[]>('/platform/subscriptions'); }
+export async function getPlatformSubscriptions() {
+  if (isDesktopMode()) return desktop.platform.subscriptions();
+  return api<PlatformSubscriptionRecord[]>('/platform/subscriptions');
+}
 export async function updatePlatformSubscription(businessId: string, action: 'confirm_payment' | 'cancel_request', paymentReference?: string) {
+  if (isDesktopMode()) return desktop.platform.updateSubscription(businessId);
   return api<BusinessSubscriptionRecord>(`/platform/subscriptions/${encodeURIComponent(businessId)}`, { method: 'PATCH', body: JSON.stringify({ action, paymentReference }) });
 }
 
 export async function getPlatformStats() {
+  if (isDesktopMode()) return desktop.platform.stats();
   return api<{ businesses: number; activeBusinesses: number; users: number; activeUsers: number; completedSales: number; salesVolumeCOP: number }>('/platform/stats');
 }
 
 export async function getPlatformBusinesses() {
+  if (isDesktopMode()) return desktop.platform.businesses();
   return api<{ id: string; name: string; type: string; currency: string; active: boolean; createdAt: string; users: number }[]>('/platform/businesses');
 }
 
 export async function setPlatformBusinessStatus(id: string, active: boolean, reason = '', description = '') {
+  if (isDesktopMode()) return desktop.platform.setBusinessStatus(id, active);
   const params = new URLSearchParams({ active: String(active) });
   if (!active) { params.set('reason', reason); params.set('description', description); }
   return api<{ id: string; active: boolean; caseId?: string | null }>(`/platform/businesses/${encodeURIComponent(id)}/status?${params.toString()}`, { method: 'PATCH' });
@@ -336,19 +399,23 @@ export interface PlatformUserRecord {
   role: 'superadmin' | 'owner' | 'business_admin' | 'cashier'; active: boolean; createdAt: string;
 }
 export async function getPlatformUsers(search = '') {
+  if (isDesktopMode()) return desktop.platform.users(search);
   return api<PlatformUserRecord[]>(`/platform/users${search ? `?search=${encodeURIComponent(search)}` : ''}`);
 }
 export interface PlatformAuditRecord {
   id: number; actorId: string; actorName: string; action: string; entityId: string; details: Record<string, unknown>; createdAt: string;
 }
 export async function getPlatformAudit(limit = 50) {
+  if (isDesktopMode()) return desktop.platform.audit() as Promise<PlatformAuditRecord[]>;
   return api<PlatformAuditRecord[]>(`/platform/audit?limit=${Math.min(200, Math.max(1, limit))}`);
 }
 export async function createPlatformUser(input: { name: string; email: string; password: string; role: 'superadmin' | 'owner' | 'business_admin' | 'cashier'; businessId?: string | null }) {
+  if (isDesktopMode()) return desktop.platform.createUser(input);
   return api<PlatformUserRecord>('/platform/users', { method: 'POST', body: JSON.stringify(input) });
 }
 
 export async function setPlatformUserStatus(id: string, active: boolean) {
+  if (isDesktopMode()) return desktop.platform.setUserStatus(id, active);
   return api<{ id: string; active: boolean }>(`/platform/users/${encodeURIComponent(id)}/status?active=${active}`, { method: 'PATCH' });
 }
 
@@ -357,57 +424,94 @@ export interface BusinessUserRecord {
 }
 export interface CustomRoleRecord { id: string; name: string; permissions: string[]; createdAt: string; }
 export async function getBusinessUsers() {
+  if (isDesktopMode()) return desktop.users.list();
   return api<BusinessUserRecord[]>('/users');
 }
 export async function getCustomRoles() {
+  if (isDesktopMode()) return desktop.users.roles();
   return api<CustomRoleRecord[]>('/custom-roles');
 }
 export async function createCustomRole(payload: { name: string; permissions: string[] }) {
+  if (isDesktopMode()) return desktop.users.createRole(payload);
   return api<CustomRoleRecord>('/custom-roles', { method: 'POST', body: JSON.stringify(payload) });
 }
 export async function createBusinessUser(payload: { name: string; email: string; password: string; role: 'business_admin' | 'cashier'; customRoleId?: string | null }) {
+  if (isDesktopMode()) return desktop.users.create(payload);
   return api<BusinessUserRecord>('/users', { method: 'POST', body: JSON.stringify(payload) });
 }
 export async function updateBusinessUser(id: string, patch: { role?: 'business_admin' | 'cashier'; customRoleId?: string | null; active?: boolean }) {
+  if (isDesktopMode()) return desktop.users.update(id, patch);
   return api<BusinessUserRecord>(`/users/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify(patch) });
 }
 
 export interface SupportMessageRecord { id: number; senderId: string; senderRole: string; senderName: string; message: string; createdAt: string; readAt?: string | null; }
 export interface SupportCaseRecord { id: string; businessId: string; businessName?: string | null; reason: string; description: string; status: 'open'|'in_review'|'awaiting_business'|'resolved'|'closed'; createdAt: string; updatedAt: string; unreadCount: number; }
 export interface SuspensionStatusRecord { businessId: string; businessName: string; active: boolean; reason: string; description: string; suspendedAt?: string | null; case: SupportCaseRecord | null; messages: SupportMessageRecord[]; }
-export async function getSuspensionStatus() { return api<SuspensionStatusRecord>('/suspension/status'); }
-export async function getOwnerSupportCase() { return api<SupportCaseRecord | null>('/support/case'); }
-export async function getOwnerSupportMessages() { return api<SupportMessageRecord[]>('/support/messages'); }
-export async function sendOwnerSupportMessage(message: string) { return api<SupportMessageRecord>('/support/messages', { method: 'POST', body: JSON.stringify({ message }) }); }
-export async function getPlatformSupportCases() { return api<SupportCaseRecord[]>('/platform/support/cases'); }
-export async function getPlatformSupportMessages(caseId: string) { return api<SupportMessageRecord[]>(`/platform/support/cases/${encodeURIComponent(caseId)}/messages`); }
-export async function sendPlatformSupportMessage(caseId: string, message: string) { return api<SupportMessageRecord>(`/platform/support/cases/${encodeURIComponent(caseId)}/messages`, { method: 'POST', body: JSON.stringify({ message }) }); }
-export async function updatePlatformSupportCase(caseId: string, status: SupportCaseRecord['status']) { return api<{ id: string; status: SupportCaseRecord['status'] }>(`/platform/support/cases/${encodeURIComponent(caseId)}`, { method: 'PATCH', body: JSON.stringify({ status }) }); }
+export async function getSuspensionStatus() {
+  if (isDesktopMode()) return desktop.support.suspension();
+  return api<SuspensionStatusRecord>('/suspension/status');
+}
+export async function getOwnerSupportCase() {
+  if (isDesktopMode()) return desktop.support.ownerCase();
+  return api<SupportCaseRecord | null>('/support/case');
+}
+export async function getOwnerSupportMessages() {
+  if (isDesktopMode()) return desktop.support.ownerMessages();
+  return api<SupportMessageRecord[]>('/support/messages');
+}
+export async function sendOwnerSupportMessage(message: string) {
+  if (isDesktopMode()) return desktop.support.sendOwnerMessage(message);
+  return api<SupportMessageRecord>('/support/messages', { method: 'POST', body: JSON.stringify({ message }) });
+}
+export async function getPlatformSupportCases() {
+  if (isDesktopMode()) return desktop.support.platformCases();
+  return api<SupportCaseRecord[]>('/platform/support/cases');
+}
+export async function getPlatformSupportMessages(caseId: string) {
+  if (isDesktopMode()) return desktop.support.platformMessages();
+  return api<SupportMessageRecord[]>(`/platform/support/cases/${encodeURIComponent(caseId)}/messages`);
+}
+export async function sendPlatformSupportMessage(caseId: string, message: string) {
+  if (isDesktopMode()) return desktop.support.sendPlatformMessage(caseId, message);
+  return api<SupportMessageRecord>(`/platform/support/cases/${encodeURIComponent(caseId)}/messages`, { method: 'POST', body: JSON.stringify({ message }) });
+}
+export async function updatePlatformSupportCase(caseId: string, status: SupportCaseRecord['status']) {
+  if (isDesktopMode()) return desktop.support.updatePlatformCase(caseId, status);
+  return api<{ id: string; status: SupportCaseRecord['status'] }>(`/platform/support/cases/${encodeURIComponent(caseId)}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+}
+
+function localKey(): string {
+  return isDesktopMode() ? desktop.database.key() : STORAGE_KEY;
+}
 
 function makeLocalDatabase(): LocalDatabase {
+  const key = localKey();
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(key);
     if (saved) {
       const parsed = JSON.parse(saved) as LocalDatabase;
       if (parsed.version === 1 && Array.isArray(parsed.products) && Array.isArray(parsed.sales)) {
         const safe = { ...parsed, suppliers: Array.isArray(parsed.suppliers) ? parsed.suppliers : [], recipes: Array.isArray(parsed.recipes) ? parsed.recipes : [], orders: Array.isArray(parsed.orders) ? parsed.orders : [], movements: Array.isArray(parsed.movements) ? parsed.movements : [], cashSession: parsed.cashSession ?? null };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(safe));
+        localStorage.setItem(key, JSON.stringify(safe));
         return safe;
       }
     }
   } catch { /* A corrupted local cache will be rebuilt from safe demo data. */ }
-  const initial: LocalDatabase = { version: 1, products: INITIAL_PRODUCTS, suppliers: [], sales: [], recipes: [], orders: [], movements: [], cashSession: null };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+  const initial: LocalDatabase = isDesktopMode()
+    ? { version: 1, products: [], suppliers: [], sales: [], recipes: [], orders: [], movements: [], cashSession: null }
+    : { version: 1, products: INITIAL_PRODUCTS, suppliers: [], sales: [], recipes: [], orders: [], movements: [], cashSession: null };
+  localStorage.setItem(key, JSON.stringify(initial));
   return initial;
 }
 
 function readLocal(): LocalDatabase { return makeLocalDatabase(); }
-function writeLocal(db: LocalDatabase) { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
+function writeLocal(db: LocalDatabase) { localStorage.setItem(localKey(), JSON.stringify(db)); }
 function networkError(error: unknown): boolean { return error instanceof TypeError; }
 function hasAuthenticatedSession(): boolean { return Boolean(localStorage.getItem('manager_stock_auth_token')); }
 // Local fallback is allowed only for the unauthenticated preview mode. Once signed in,
 // a network outage must never split transactional records between SQLite and localStorage.
-function canFallbackToLocal(error: unknown): boolean { return networkError(error) && !hasAuthenticatedSession(); }
+// En escritorio no hay servidor: el almacenamiento local ES la fuente de verdad.
+function canFallbackToLocal(error: unknown): boolean { return networkError(error) && (isDesktopMode() || !hasAuthenticatedSession()); }
 function uniqueId(prefix: string) { return `${prefix}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`; }
 function money(value: number) { return Math.round((value + Number.EPSILON) * 100) / 100; }
 
@@ -415,6 +519,7 @@ export const dataService = {
   currency: CURRENCY,
   defaultTaxRate: DEFAULT_TAX_RATE,
   async apiIsAvailable(): Promise<boolean> {
+    if (isDesktopMode()) return false;
     try { await api('/health'); return true; }
     catch (error) {
       // A signed-in user must never silently move to the browser's local cache.
@@ -742,7 +847,7 @@ export const dataService = {
   async getOrders(): Promise<OrderRecord[]> {
     try {
       const data = await api<any[]>('/orders');
-      const normalized = data.map(row => ({ id: row.id, channel: row.channel, customer: row.customer, phone: row.phone, address: row.address, status: row.status, notes: row.notes, total: row.total, created_at: row.created_at, items: (row.items || []).map((item: any) => ({ productId: item.product_id, productName: item.product_name, quantity: item.quantity, unitPrice: item.unit_price, notes: item.notes })) })) as OrderRecord[];
+      const normalized = data.map(row => ({ id: row.id, channel: row.channel, customer: row.customer, phone: row.phone, address: row.address, status: row.status, notes: row.notes, total: row.total, created_at: row.created_at, tableId: row.table_id || row.tableId || null, tableNumber: row.table_number || row.tableNumber || null, items: (row.items || []).map((item: any) => ({ productId: item.product_id || item.productId, productName: item.product_name || item.productName, quantity: item.quantity, unitPrice: item.unit_price || item.unitPrice, notes: item.notes })) })) as OrderRecord[];
       const db = readLocal(); db.orders = normalized; writeLocal(db); return normalized;
     } catch (error) {
       if (!canFallbackToLocal(error)) throw error;
@@ -762,7 +867,7 @@ export const dataService = {
         const product = db.products.find(p => p.id === item.productId);
         return { productId: item.productId, productName: product?.name || item.productId, quantity: item.quantity, unitPrice: product?.price || 0, notes: item.notes };
       });
-      const normalized: OrderRecord = { id: serverCreated.id, channel: input.channel, customer: input.customer || 'Cliente general', phone: input.phone || '', address: input.address || '', status: serverCreated.status, notes: input.notes || '', total: serverCreated.total, created_at: serverCreated.createdAt, items };
+      const normalized: OrderRecord = { id: serverCreated.id, channel: input.channel, customer: input.customer || 'Cliente general', phone: input.phone || '', address: input.address || '', status: serverCreated.status, notes: input.notes || '', total: serverCreated.total, created_at: serverCreated.createdAt, items, tableId: input.tableId || null, tableNumber: input.tableNumber || null };
       db.orders = [normalized, ...db.orders.filter(o => o.id !== normalized.id)]; writeLocal(db);
       return normalized;
     }
@@ -774,7 +879,7 @@ export const dataService = {
       if (!recipe && product.stock < item.quantity) throw new Error(`Stock insuficiente para ${product.name}.`);
       return { productId: product.id, productName: product.name, quantity: item.quantity, unitPrice: product.price, notes: item.notes };
     });
-    const created: OrderRecord = { id: uniqueId('PED'), channel: input.channel, customer: input.customer || 'Cliente general', phone: input.phone || '', address: input.address || '', status: 'received', notes: input.notes || '', total: money(items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)), created_at: new Date().toISOString(), items };
+    const created: OrderRecord = { id: uniqueId('PED'), channel: input.channel, customer: input.customer || 'Cliente general', phone: input.phone || '', address: input.address || '', status: 'received', notes: input.notes || '', total: money(items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)), created_at: new Date().toISOString(), items, tableId: input.tableId || null, tableNumber: input.tableNumber || null };
     db.orders.unshift(created); writeLocal(db); return created;
   },
   async updateOrderStatus(id: string, status: OrderRecord['status']): Promise<void> {

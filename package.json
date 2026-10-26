@@ -7,7 +7,10 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "backend": "python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000"
+    "backend": "python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000",
+    "desktop:prepare": "vite build --mode desktop && npm --prefix desktop run prepare-web",
+    "desktop:dev": "npm run desktop:prepare && npm --prefix desktop start",
+    "desktop:build": "vite build --mode desktop && npm --prefix desktop run build"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

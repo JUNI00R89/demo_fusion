@@ -106,8 +106,9 @@
   animation: ms-grow-x 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* Barrido de tema: el snapshot nuevo se revela con clip-path desde el botón (ver
-   Layout). Aquí solo se anula el cross-fade por defecto de View Transitions. */
+/* Barrido de tema: el snapshot nuevo se revela con un clip-path orgánico con
+   tentáculos desde el botón (ver Layout). Aquí solo se anula el cross-fade por
+   defecto de View Transitions. */
 ::view-transition-old(root) { animation: none; mix-blend-mode: normal; z-index: 1; }
 /* El snapshot nuevo va encima: el clip-path orgánico (ver Layout) lo va revelando
    sobre el anterior. */
@@ -134,7 +135,7 @@
 [data-slot="card"]:not([data-slot="card"] *) {
   border-radius: 1.125rem;
   box-shadow: var(--app-shadow-card);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Un poco más de tamaño: las tarjetas de la vista con p-5 (1.25rem) pasan a
    1.5rem por lado. Las de dentro se quedan como estaban. */
@@ -142,9 +143,8 @@
 /* Excepciones: variantes que salen del estilo común. */
 [data-slot="card"].rounded-3xl:not([data-slot="card"] *) { border-radius: 1.5rem; }
 [data-slot="card"].border-dashed:not([data-slot="card"] *) { box-shadow: none; }
-/* Las tarjetas de la vista se elevan suavemente al pasar el cursor (y: -2). */
+/* Hover: solo cambia la sombra; las tarjetas NO se elevan (sin flote). */
 [data-slot="card"]:not([data-slot="card"] *):hover {
-  transform: translateY(-2px);
   box-shadow: var(--app-shadow-card-hover);
 }
 

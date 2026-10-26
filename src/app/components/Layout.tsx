@@ -14,6 +14,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
 import { dataService } from '../services/dataService';
+import { isDesktopMode } from '../services/desktop';
 import { motion, AnimatePresence } from 'motion/react';
 import { canAccessPath, roleLabel } from '../security/permissions';
 import { toast } from 'sonner';
@@ -42,13 +43,38 @@ type ViewTransitionStarter = (callback: () => Promise<void> | void) => {
   finished?: Promise<void>;
 };
 
-/** Polígono irregular: el borde del barrido de tema nunca es un círculo perfecto. */
-function irregularBlob(cx: number, cy: number, radius: number, wobble: number, points = 18) {
+/** Tentáculos del barrido (coordenadas normalizadas 0..1 del giro completo). */
+const VENOM_SPIKES = [
+  { at: 0.04, width: 0.055, length: 0.6 },
+  { at: 0.22, width: 0.04, length: 0.34 },
+  { at: 0.41, width: 0.07, length: 0.78 },
+  { at: 0.58, width: 0.035, length: 0.28 },
+  { at: 0.74, width: 0.05, length: 0.5 },
+  { at: 0.9, width: 0.032, length: 0.24 },
+];
+
+/**
+ * Borde vivo de la masa: lóbulos orgánicos + tentáculos afilados que se estiran
+ * hacia afuera. Al girar (`spin`) los tentáculos salen disparados en nuevas
+ * direcciones, así el borde nunca parece un círculo perfecto.
+ */
+function venomBlob(cx: number, cy: number, radius: number, options: { spin: number; wobble: number; tendril: number }, points = 72) {
+  const { spin, wobble, tendril } = options;
   const coords: string[] = [];
   for (let index = 0; index < points; index += 1) {
-    const angle = (index / points) * Math.PI * 2;
-    const variation = 1 + Math.sin(angle * 3 + index * 1.7) * wobble;
-    const distance = radius * variation;
+    const t = index / points;
+    const angle = t * Math.PI * 2 + spin;
+    let factor = 1
+      + Math.sin(angle * 3 + spin * 1.7) * wobble * 0.6
+      + Math.sin(angle * 6.5 - spin * 2.3) * wobble * 0.3
+      + Math.sin(angle * 11 + 1.3) * wobble * 0.15;
+    for (const spike of VENOM_SPIKES) {
+      const straight = Math.abs(t - spike.at);
+      const delta = Math.min(straight, 1 - straight) / spike.width;
+      // Gaussianas angulares: cada tentáculo estira el borde con punta afilada.
+      if (delta < 3) factor += Math.exp(-delta * delta) * spike.length * tendril;
+    }
+    const distance = radius * factor;
     coords.push(`${(cx + Math.cos(angle) * distance).toFixed(1)}px ${(cy + Math.sin(angle) * distance).toFixed(1)}px`);
   }
   return `polygon(${coords.join(', ')})`;
@@ -64,26 +90,42 @@ function nextFrames(count = 2) {
   });
 }
 
-/** Revela el tema nuevo con clip-path orgánico naciendo en el botón sol/luna (~0.6 s). */
+/**
+ * Revela el tema nuevo como una masa de simbionte que brota en el botón
+ * sol/luna (~0.4 s): estallido instantáneo, ondulación con tentáculos y giro
+ * hasta envolver la pantalla. El tema anterior se escapa (escala) al ser absorbido.
+ */
 function animateThemeReveal(origin: { x: number; y: number }) {
   const reach = Math.hypot(
     Math.max(origin.x, window.innerWidth - origin.x),
     Math.max(origin.y, window.innerHeight - origin.y),
-  ) + 120;
-  const keyframes = {
-    clipPath: [
-      irregularBlob(origin.x, origin.y, reach * 0.02, 0.05),
-      irregularBlob(origin.x, origin.y, reach * 0.34, 0.16),
-      irregularBlob(origin.x, origin.y, reach * 0.68, 0.1),
-      irregularBlob(origin.x, origin.y, reach, 0.03),
-    ],
-  };
-  const options: KeyframeAnimationOptions & { pseudoElement: string } = {
-    duration: 600,
-    easing: 'ease-in-out',
+  ) + 160;
+  // Radio relativo en cada tiempo: avance lineal + UNA sola curva de easing en
+  // toda la animación (curvas por keyframe reiniciaban la velocidad en cada
+  // tiempo y se sentía a tirones). La ondulación y los tentáculos se desvanecen
+  // al acercarse a pantalla completa.
+  const beats = [
+    { radius: 0.03, wobble: 0.05, tendril: 1.05, spin: -0.34 },
+    { radius: 0.2, wobble: 0.2, tendril: 0.9, spin: -0.14 },
+    { radius: 0.45, wobble: 0.24, tendril: 0.62, spin: 0.06 },
+    { radius: 0.7, wobble: 0.16, tendril: 0.4, spin: 0.24 },
+    { radius: 0.89, wobble: 0.08, tendril: 0.24, spin: 0.4 },
+    { radius: 1, wobble: 0.03, tendril: 0.14, spin: 0.52 },
+  ];
+  const duration = 400;
+  const clipPath = beats.map(beat => ({
+    clipPath: venomBlob(origin.x, origin.y, reach * beat.radius, beat),
+  }));
+  document.documentElement.animate(clipPath, {
+    duration,
+    easing: 'cubic-bezier(0.2, 0.85, 0.25, 1)',
     pseudoElement: '::view-transition-new(root)',
-  };
-  document.documentElement.animate(keyframes, options);
+  });
+  // El tema anterior se hunde al ser absorbido (escala hacia afuera, sin salirse).
+  document.documentElement.animate(
+    [{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }],
+    { duration, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', pseudoElement: '::view-transition-old(root)' },
+  );
 }
 
 interface NavItem {
@@ -138,7 +180,6 @@ function LayoutShell({ children }: LayoutProps) {
         const connected = await dataService.apiIsAvailable();
         if (!active) return;
         setDatabaseConnected(connected);
-        if (!connected) return;
         if (!config?.features.inventory) {
           setLowStockCount(0);
           return;
@@ -187,12 +228,21 @@ function LayoutShell({ children }: LayoutProps) {
     mode,
   });
 
+  /** Fondo del tema que entra: lo usan el halo del revelado y el barrido de respaldo. */
+  const incomingThemeColor = (mode: 'light' | 'dark') => {
+    const themeRef = config?.theme ?? DEFAULT_BUSINESS_THEMES[config?.type ?? 'retail'];
+    return mode === 'dark'
+      ? (themeRef.darkBackground || '#0D0D10')
+      : (themeRef.lightBackground || themeRef.background);
+  };
+
   /**
-   * El botón sol/luna cambia el tema con un barrido de forma orgánica (borde
-   * irregular, no un círculo perfecto) que nace en el propio botón:
+   * El botón sol/luna cambia el tema con una masa de simbionte que brota en el
+   * propio botón (borde irregular con tentáculos que giran, halo del color que
+   * entra y el tema viejo hundiéndose al ser absorbido):
    *  · Navegadores con View Transitions: el snapshot del tema nuevo se revela
-   *    animando `clip-path` sobre ::view-transition-new(root) durante ~0.6 s.
-   *  · Resto: <ThemeSweep> dibuja la misma forma con motion.
+   *    animando `clip-path` sobre ::view-transition-new(root) durante ~0.45 s.
+   *  · Resto: <ThemeSweep> dibuja la misma masa con motion (onda + tentáculos).
    * El tema se aplica al DOM de forma SINCRÓNICA —nada de awaits dentro del
    * callback— para que el snapshot nuevo ya salga con el color nuevo y siempre
    * haya algo que revelar; el guardado en el servidor va por detrás.
@@ -237,13 +287,7 @@ function LayoutShell({ children }: LayoutProps) {
 
   // Color del tema que entra: la forma lo usa mientras cubre la pantalla, así el
   // cambio de tema debajo pasa inadvertido.
-  const themeSweepColor = (() => {
-    const themeRef = config?.theme ?? (config ? DEFAULT_BUSINESS_THEMES[config.type] : DEFAULT_BUSINESS_THEMES.retail);
-    const target = themeSweep?.mode ?? (isDark ? 'light' : 'dark');
-    return target === 'dark'
-      ? (themeRef.darkBackground || '#0D0D10')
-      : (themeRef.lightBackground || themeRef.background);
-  })();
+  const themeSweepColor = incomingThemeColor(themeSweep?.mode ?? (isDark ? 'light' : 'dark'));
 
   const coverAndPersistTheme = async () => {
     if (!themeSweep) return;
@@ -614,9 +658,9 @@ function LayoutShell({ children }: LayoutProps) {
             </p>
           </div>
 
-          <div title={databaseConnected ? 'Las operaciones del servidor se guardan en SQLite.' : 'No hay conexión con la API. Las operaciones que requieren el servidor pueden fallar; no continúes ventas hasta recuperar la conexión.'} className={`hidden sm:flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold ${databaseConnected ? 'bg-emerald-50/80 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300' : 'bg-amber-50/80 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300'}`}>
+          <div title={isDesktopMode() ? 'Aplicación de escritorio: los datos demo se guardan en este equipo.' : databaseConnected ? 'Las operaciones del servidor se guardan en SQLite.' : 'No hay conexión con la API. Las operaciones que requieren el servidor pueden fallar; no continúes ventas hasta recuperar la conexión.'} className={`hidden sm:flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold ${databaseConnected ? 'bg-emerald-50/80 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300' : 'bg-amber-50/80 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300'}`}>
             <Database size={13} />
-            {databaseConnected === null ? 'Verificando datos…' : databaseConnected ? 'Base de datos conectada' : 'Modo local de prueba'}
+            {databaseConnected === null ? 'Verificando datos…' : databaseConnected ? 'Base de datos conectada' : isDesktopMode() ? 'Modo escritorio local' : 'Modo local de prueba'}
           </div>
 
           {/* Empresa selector (desktop) */}
