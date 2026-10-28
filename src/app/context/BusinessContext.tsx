@@ -53,22 +53,22 @@ export const DEFAULT_CONFIGS: Record<BusinessType, Omit<BusinessConfig, 'name'>>
 
 /**
  * Paleta por defecto de la aplicación (sistema visual de referencia):
- * acento naranja #F26A1B → #FF8A4C sobre superficies neutras
- * (claro: fondo #F4F4F6 / tarjetas blancas · oscuro: fondo #0D0D10 / tarjetas #17171B).
+ * acento naranja #FF6B00 sobre superficies neutras
+ * (claro: fondo #F5F5F5 / tarjetas blancas · oscuro: fondo #080B10 / tarjetas #11161E).
  *
  * Cada empresa puede seguir personalizando sus colores en Configuración: cuando lo
  * hace, su paleta guardada (`customized: true`) se respeta tal cual.
  */
 const DEFAULT_PALETTE: Omit<BusinessTheme, 'customized'> = {
-  primary: '#F26A1B',
-  secondary: '#FF8A4C',
-  accent: '#FFC09B',
-  background: '#F4F4F6',
+  primary: '#FF6B00',
+  secondary: '#E85D00',
+  accent: '#FF6B00',
+  background: '#F5F5F5',
   surface: '#FFFFFF',
-  lightBackground: '#F4F4F6',
+  lightBackground: '#F5F5F5',
   lightSurface: '#FFFFFF',
-  darkBackground: '#0D0D10',
-  darkSurface: '#17171B',
+  darkBackground: '#080B10',
+  darkSurface: '#11161E',
   mode: 'light',
 };
 
@@ -91,8 +91,8 @@ export function applyTheme(theme: BusinessTheme) {
   root.style.setProperty('--brand-primary', theme.primary);
   root.style.setProperty('--brand-secondary', theme.secondary);
   root.style.setProperty('--brand-accent', theme.accent);
-  const background = theme.mode === 'dark' ? (theme.darkBackground || '#0D0D10') : (theme.lightBackground || theme.background);
-  const surface = theme.mode === 'dark' ? (theme.darkSurface || '#17171B') : (theme.lightSurface || theme.surface);
+  const background = theme.mode === 'dark' ? (theme.darkBackground || '#080B10') : (theme.lightBackground || theme.background);
+  const surface = theme.mode === 'dark' ? (theme.darkSurface || '#11161E') : (theme.lightSurface || theme.surface);
   root.style.setProperty('--brand-background', background);
   root.style.setProperty('--brand-surface', surface);
   root.style.setProperty('--brand-soft', `${theme.primary}14`);

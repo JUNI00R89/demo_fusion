@@ -32,6 +32,9 @@ import { useAuth } from '../../context/AuthContext';
 
 const money = (value: number) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(value);
 
+const NON_KITCHEN_CATEGORIES = ['bebidas', 'gaseosas', 'aguas', 'jugos', 'café', 'te', 'cervezas', 'vinos', 'licores', 'refrescos', 'sodas'];
+const goesToKitchen = (category: string) => !NON_KITCHEN_CATEGORIES.some((c) => category.toLowerCase().includes(c));
+
 interface Table {
   id: string;
   number: number;
@@ -51,6 +54,7 @@ interface CartItem {
   price: number;
   quantity: number;
   sku: string;
+  sendToKitchen: boolean;
 }
 
 export function Tables() {
@@ -79,6 +83,8 @@ export function Tables() {
 
   useEffect(() => {
     let active = true;
+    setProducts([]);
+    setOrders([]);
     void dataService.getProducts().then((list) => {
       if (!active) return;
       setProducts(list.filter((p) => p.productType !== 'ingredient' && p.productType !== 'supplies'));
@@ -90,7 +96,7 @@ export function Tables() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [user?.businessId]);
 
   useEffect(() => {
     const activeOrders = orders.filter((o) => !['delivered', 'cancelled'].includes(o.status));
@@ -99,14 +105,30 @@ export function Tables() {
         const order = activeOrders.find((o) => o.tableId === table.id);
         if (order) {
           const itemsCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
+          const billOnly = readBillOnly(table.id);
+          const billOnlyCount = billOnly.reduce((sum, item) => sum + item.quantity, 0);
+          const billOnlyTotal = billOnly.reduce((s, i) => s + i.price * i.quantity, 0);
           return {
             ...table,
             status: 'occupied' as const,
             currentOrder: {
               orderId: order.id,
-              items: itemsCount,
-              total: order.total,
+              items: itemsCount + billOnlyCount,
+              total: order.total + billOnlyTotal,
               startTime: order.created_at,
+            },
+          };
+        }
+        const billOnly = readBillOnly(table.id);
+        if (billOnly.length > 0) {
+          return {
+            ...table,
+            status: 'occupied' as const,
+            currentOrder: {
+              orderId: `BILL-${table.id}`,
+              items: billOnly.reduce((sum, item) => sum + item.quantity, 0),
+              total: billOnly.reduce((s, i) => s + i.price * i.quantity, 0),
+              startTime: new Date().toISOString(),
             },
           };
         }
@@ -141,7 +163,7 @@ export function Tables() {
         toast.error('Producto sin stock');
         return;
       }
-      setCart([...cart, { productId: product.id, name: product.name, price: product.price, quantity: 1, sku: product.sku }]);
+      setCart([...cart, { productId: product.id, name: product.name, price: product.price, quantity: 1, sku: product.sku, sendToKitchen: goesToKitchen(product.category) }]);
     }
   };
 
@@ -174,19 +196,42 @@ export function Tables() {
     setActiveCategory('Todos');
     if (table.status === 'occupied' && table.currentOrder) {
       const order = orders.find((o) => o.id === table.currentOrder?.orderId);
-      if (order) {
-        setCart(
-          order.items.map((item) => ({
+      const kitchenItems = order
+        ? order.items.map((item) => ({
             productId: item.productId,
             name: item.productName,
             price: item.unitPrice,
             quantity: item.quantity,
             sku: products.find((p) => p.id === item.productId)?.sku || '',
+            sendToKitchen: true,
           }))
-        );
-      }
+        : [];
+      const billOnlyItems = readBillOnly(table.id).map((item) => ({
+        ...item,
+        sendToKitchen: false,
+      }));
+      setCart([...kitchenItems, ...billOnlyItems]);
     }
     setShowOrderModal(true);
+  };
+
+  const billOnlyKey = (tableId: string) => `table_bill_only_${tableId}`;
+
+  const readBillOnly = (tableId: string): CartItem[] => {
+    try {
+      const raw = localStorage.getItem(billOnlyKey(tableId));
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeBillOnly = (tableId: string, items: CartItem[]) => {
+    if (items.length === 0) {
+      localStorage.removeItem(billOnlyKey(tableId));
+    } else {
+      localStorage.setItem(billOnlyKey(tableId), JSON.stringify(items));
+    }
   };
 
   const saveTableOrder = async () => {
@@ -197,20 +242,45 @@ export function Tables() {
     }
     setSavingOrder(true);
     try {
-      await dataService.createOrder({
-        channel: 'table',
-        customer: customerName.trim() || `Mesa ${selectedTable.number}`,
-        phone: '',
-        address: '',
-        notes: `Mesa ${selectedTable.number}`,
-        tableId: selectedTable.id,
-        tableNumber: selectedTable.number,
-        items: cart.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+      const kitchenItems = cart.filter((item) => item.sendToKitchen);
+      const billOnlyItems = cart.filter((item) => !item.sendToKitchen);
+
+      // Merge bill-only items with any existing bill-only items for this table
+      const existingBillOnly = readBillOnly(selectedTable.id);
+      const mergedBillOnly = [...existingBillOnly];
+      billOnlyItems.forEach((newItem) => {
+        const existing = mergedBillOnly.find((i) => i.productId === newItem.productId);
+        if (existing) {
+          existing.quantity += newItem.quantity;
+        } else {
+          mergedBillOnly.push({ ...newItem });
+        }
       });
+      writeBillOnly(selectedTable.id, mergedBillOnly);
+
+      if (kitchenItems.length > 0) {
+        await dataService.createOrder({
+          channel: 'table',
+          customer: customerName.trim() || `Mesa ${selectedTable.number}`,
+          phone: '',
+          address: '',
+          notes: `Mesa ${selectedTable.number}`,
+          tableId: selectedTable.id,
+          tableNumber: selectedTable.number,
+          items: kitchenItems.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+        });
+      }
+
       const refreshed = await dataService.getOrders();
       setOrders(refreshed);
-      toast.success(`Pedido enviado a cocina - Mesa ${selectedTable.number}`, {
-        description: `${cartItemsCount} producto(s) · ${money(cartTotal)}`,
+
+      const kitchenCount = kitchenItems.reduce((s, i) => s + i.quantity, 0);
+      const billCount = billOnlyItems.reduce((s, i) => s + i.quantity, 0);
+      const parts: string[] = [];
+      if (kitchenCount > 0) parts.push(`${kitchenCount} a cocina`);
+      if (billCount > 0) parts.push(`${billCount} a cuenta`);
+      toast.success(`Mesa ${selectedTable.number} actualizada`, {
+        description: parts.join(' · ') + ` · ${money(cartTotal)}`,
       });
       setShowOrderModal(false);
       setCart([]);
@@ -226,10 +296,15 @@ export function Tables() {
     setClosing(true);
     try {
       await dataService.updateOrderStatus(table.currentOrder.orderId, 'delivered');
+      // Clear bill-only items for this table
+      const billOnlyItems = readBillOnly(table.id);
+      const billOnlyTotal = billOnlyItems.reduce((s, i) => s + i.price * i.quantity, 0);
+      const totalCharged = table.currentOrder.total + billOnlyTotal;
+      writeBillOnly(table.id, []);
       const refreshed = await dataService.getOrders();
       setOrders(refreshed);
       toast.success(`Mesa ${table.number} cerrada`, {
-        description: `Total cobrado: ${money(table.currentOrder.total)}`,
+        description: `Total cobrado: ${money(totalCharged)}`,
       });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'No se pudo cerrar la mesa');
@@ -253,24 +328,24 @@ export function Tables() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'available':
-        return 'bg-green-50 border-green-300 dark:bg-green-950/30 dark:border-green-800';
+        return 'bg-emerald-500/10 border-emerald-500/30';
       case 'occupied':
-        return 'bg-red-50 border-red-300 dark:bg-red-950/30 dark:border-red-800';
+        return 'bg-rose-500/10 border-rose-500/30';
       case 'reserved':
-        return 'bg-yellow-50 border-yellow-300 dark:bg-yellow-950/30 dark:border-yellow-800';
+        return 'bg-amber-500/10 border-amber-500/30';
       default:
-        return 'bg-gray-50 border-gray-300';
+        return 'bg-muted border-border';
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'available':
-        return <Badge className="bg-green-600 text-white">Disponible</Badge>;
+        return <Badge className="bg-emerald-500 text-white">Disponible</Badge>;
       case 'occupied':
-        return <Badge className="bg-red-600 text-white">Ocupada</Badge>;
+        return <Badge className="bg-rose-500 text-white">Ocupada</Badge>;
       case 'reserved':
-        return <Badge className="bg-yellow-600 text-white">Reservada</Badge>;
+        return <Badge className="bg-amber-500 text-white">Reservada</Badge>;
       default:
         return null;
     }
@@ -308,33 +383,33 @@ export function Tables() {
             </div>
           </Card>
 
-          <Card className="p-4 border-2 border-green-200 bg-green-50 dark:bg-green-950/30 dark:border-green-800">
+          <Card className="p-4 border border-border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Disponibles</p>
-                <p className="text-2xl font-bold text-green-600">{availableTables}</p>
+                <p className="text-2xl font-bold text-emerald-500">{availableTables}</p>
               </div>
-              <CheckCircle className="text-green-600" size={32} />
+              <CheckCircle className="text-emerald-500" size={32} />
             </div>
           </Card>
 
-          <Card className="p-4 border-2 border-red-200 bg-red-50 dark:bg-red-950/30 dark:border-red-800">
+          <Card className="p-4 border border-border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Ocupadas</p>
-                <p className="text-2xl font-bold text-red-600">{occupiedTables}</p>
+                <p className="text-2xl font-bold text-rose-500">{occupiedTables}</p>
               </div>
-              <XCircle className="text-red-600" size={32} />
+              <XCircle className="text-rose-500" size={32} />
             </div>
           </Card>
 
-          <Card className="p-4 border-2 border-yellow-200 bg-yellow-50 dark:bg-yellow-950/30 dark:border-yellow-800">
+          <Card className="p-4 border border-border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Reservadas</p>
-                <p className="text-2xl font-bold text-yellow-600">{reservedTables}</p>
+                <p className="text-2xl font-bold text-amber-500">{reservedTables}</p>
               </div>
-              <Clock className="text-yellow-600" size={32} />
+              <Clock className="text-amber-500" size={32} />
             </div>
           </Card>
         </div>
@@ -343,7 +418,7 @@ export function Tables() {
           {tables.map((table) => (
             <Card
               key={table.id}
-              className={`p-5 border-2 transition-all hover:shadow-lg cursor-pointer ${getStatusColor(table.status)}`}
+              className={`p-5 border transition-all hover:shadow-md cursor-pointer ${getStatusColor(table.status)}`}
               onClick={() => openTable(table)}
             >
               <div className="space-y-3">
@@ -359,7 +434,7 @@ export function Tables() {
                 </div>
 
                 {table.currentOrder && (
-                  <div className="space-y-2 pt-3 border-t border-red-200 dark:border-red-800">
+                  <div className="space-y-2 pt-3 border-t border-border">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Orden:</span>
                       <span className="font-semibold text-foreground">{table.currentOrder.orderId}</span>
@@ -370,7 +445,7 @@ export function Tables() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Total:</span>
-                      <span className="font-bold text-orange-600">{money(table.currentOrder.total)}</span>
+                      <span className="font-bold text-primary">{money(table.currentOrder.total)}</span>
                     </div>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock size={12} />
@@ -379,7 +454,7 @@ export function Tables() {
 
                     <Button
                       size="sm"
-                      className="w-full bg-red-600 hover:bg-red-700"
+                      className="w-full bg-rose-600 hover:bg-rose-700"
                       disabled={closing}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -393,7 +468,7 @@ export function Tables() {
                 )}
 
                 {table.status === 'available' && (
-                  <Button size="sm" className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
+                  <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700">
                     <Plus size={14} className="mr-1" />
                     Abrir Mesa
                   </Button>
@@ -405,16 +480,16 @@ export function Tables() {
       </div>
 
       <Dialog open={showOrderModal} onOpenChange={setShowOrderModal}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto p-0">
-          <DialogHeader className="p-6 pb-4">
+        <DialogContent className="w-full sm:w-[96vw] max-w-full sm:max-w-7xl max-h-[100vh] sm:max-h-[92vh] overflow-y-auto p-0 top-0 sm:top-[4%] translate-y-0 rounded-none sm:rounded-lg">
+          <DialogHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
             <DialogTitle className="flex items-center gap-2">
-              <UtensilsCrossed className="text-orange-600" size={24} />
+              <UtensilsCrossed className="text-primary" size={24} />
               {selectedTable?.status === 'occupied' ? `Editar Pedido - Mesa ${selectedTable.number}` : `Abrir Mesa ${selectedTable?.number}`}
             </DialogTitle>
             <DialogDescription>Selecciona productos y envíalos a cocina</DialogDescription>
           </DialogHeader>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-6 pb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 sm:gap-8 px-4 sm:px-8 pb-8">
             <div className="space-y-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
@@ -423,7 +498,7 @@ export function Tables() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleBarcodeSearch}
-                  className="pl-10 h-11"
+                  className="pl-10 h-12 text-base"
                 />
               </div>
               <div className="flex gap-1.5 overflow-x-auto pb-1">
@@ -431,26 +506,26 @@ export function Tables() {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                      activeCategory === cat ? 'bg-orange-500 text-white' : 'bg-accent text-muted-foreground hover:bg-orange-50'
+                    className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                      activeCategory === cat ? 'bg-primary text-primary-foreground' : 'bg-accent text-muted-foreground hover:bg-accent/80'
                     }`}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
-              <div className="grid grid-cols-2 gap-2 max-h-[400px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto pr-1">
                 {filteredProducts.map((product) => (
                   <Card
                     key={product.id}
-                    className="p-3 border cursor-pointer hover:border-orange-400 hover:shadow-sm transition-all"
+                    className="p-5 border cursor-pointer hover:border-primary transition-colors min-h-[80px] outline-none focus:outline-none focus:ring-0"
                     onClick={() => addToCart(product)}
                   >
                     <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground line-clamp-1">{product.name}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-muted-foreground">Stock: {product.stock}</span>
-                        <span className="text-sm font-bold text-orange-600">{money(product.price)}</span>
+                      <p className="text-base font-semibold text-foreground line-clamp-2">{product.name}</p>
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-sm text-muted-foreground">Stock: {product.stock}</span>
+                        <span className="text-base font-bold text-primary">{money(product.price)}</span>
                       </div>
                     </div>
                   </Card>
@@ -461,9 +536,9 @@ export function Tables() {
             <div className="space-y-4">
               <Card className="p-4 border border-border">
                 <div className="flex items-center gap-2 mb-3">
-                  <ShoppingCart className="text-orange-600" size={20} />
+                  <ShoppingCart className="text-primary" size={20} />
                   <h3 className="font-bold">Pedido de Mesa {selectedTable?.number}</h3>
-                  <Badge className="ml-auto bg-orange-500 text-white">{cartItemsCount} items</Badge>
+                  <Badge className="ml-auto bg-primary text-primary-foreground">{cartItemsCount} items</Badge>
                 </div>
 
                 <Input
@@ -475,7 +550,7 @@ export function Tables() {
 
                 <Separator className="mb-3" />
 
-                <div className="space-y-2 max-h-[300px] overflow-y-auto mb-3">
+                <div className="space-y-3 max-h-[50vh] overflow-y-auto mb-3">
                   {cart.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground">
                       <ShoppingCart className="mx-auto mb-2 opacity-30" size={40} />
@@ -490,21 +565,29 @@ export function Tables() {
                             <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
                             <p className="text-xs text-muted-foreground">{money(item.price)} c/u</p>
                           </div>
-                          <button onClick={() => removeFromCart(item.productId)} className="ml-1 p-1 hover:text-red-500 text-muted-foreground">
+                          <button onClick={() => removeFromCart(item.productId)} className="ml-1 p-1 hover:text-rose-500 text-muted-foreground">
                             <X size={14} />
+                          </button>
+                        </div>
+                        <div className="flex items-center justify-between mb-1">
+                          <button
+                            onClick={() => setCart(cart.map((c) => c.productId === item.productId ? { ...c, sendToKitchen: !c.sendToKitchen } : c))}
+                            className={`text-[11px] px-2 py-1 rounded-md font-medium transition-colors ${item.sendToKitchen ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}`}
+                          >
+                            {item.sendToKitchen ? '🍳 A cocina' : '📋 Solo cuenta'}
                           </button>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1">
-                            <button onClick={() => updateQuantity(item.productId, -1)} className="w-6 h-6 rounded border border-border flex items-center justify-center hover:bg-orange-50">
-                              <Minus size={12} />
+                            <button onClick={() => updateQuantity(item.productId, -1)} className="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-accent">
+                              <Minus size={14} />
                             </button>
-                            <span className="w-7 text-center text-sm font-bold">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.productId, 1)} className="w-6 h-6 rounded border border-border flex items-center justify-center hover:bg-orange-50">
-                              <Plus size={12} />
+                            <span className="w-8 text-center text-base font-bold">{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.productId, 1)} className="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-accent">
+                              <Plus size={14} />
                             </button>
                           </div>
-                          <span className="text-sm font-bold text-orange-600">{money(item.price * item.quantity)}</span>
+                          <span className="text-sm font-bold text-primary">{money(item.price * item.quantity)}</span>
                         </div>
                       </div>
                     ))
@@ -515,7 +598,7 @@ export function Tables() {
 
                 <div className="flex justify-between font-bold text-base mb-4">
                   <span>Total</span>
-                  <span className="text-orange-600">{money(cartTotal)}</span>
+                  <span className="text-primary">{money(cartTotal)}</span>
                 </div>
 
                 <div className="flex gap-2">
@@ -525,9 +608,9 @@ export function Tables() {
                   <Button
                     onClick={() => void saveTableOrder()}
                     disabled={cart.length === 0 || savingOrder}
-                    className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                    className="flex-1 bg-primary hover:bg-primary-hover"
                   >
-                    {savingOrder ? 'Enviando...' : 'Enviar a Cocina'}
+                    {savingOrder ? 'Guardando...' : cart.some((i) => i.sendToKitchen) ? 'Enviar a Cocina' : 'Agregar a Cuenta'}
                   </Button>
                 </div>
               </Card>

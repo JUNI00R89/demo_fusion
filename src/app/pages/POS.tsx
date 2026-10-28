@@ -375,8 +375,8 @@ export function POS() {
                     key={product.id}
                     className={`p-4 border cursor-pointer transition-all select-none ${
                       outOfStock ? 'border-border opacity-50 cursor-not-allowed'
-                      : inCart ? 'border-green-500 bg-green-50 dark:bg-green-950/20'
-                      : 'border-border hover:border-orange-400 hover:shadow-sm'
+                      : inCart ? 'border-primary bg-primary/10'
+                      : 'border-border hover:border-primary'
                     }`}
                     onClick={() => !outOfStock && addToCart(product)}
                   >
@@ -384,7 +384,7 @@ export function POS() {
                       <div className="flex justify-between items-start">
                         <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-tight">{product.name}</h3>
                         {inCart && (
-                          <span className="ml-1 w-5 h-5 bg-green-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                          <span className="ml-1 w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center font-bold flex-shrink-0">
                             {inCart.quantity}
                           </span>
                         )}

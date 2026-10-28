@@ -105,14 +105,14 @@ function animateThemeReveal(origin: { x: number; y: number }) {
   // tiempo y se sentía a tirones). La ondulación y los tentáculos se desvanecen
   // al acercarse a pantalla completa.
   const beats = [
-    { radius: 0.03, wobble: 0.05, tendril: 1.05, spin: -0.34 },
-    { radius: 0.2, wobble: 0.2, tendril: 0.9, spin: -0.14 },
-    { radius: 0.45, wobble: 0.24, tendril: 0.62, spin: 0.06 },
-    { radius: 0.7, wobble: 0.16, tendril: 0.4, spin: 0.24 },
-    { radius: 0.89, wobble: 0.08, tendril: 0.24, spin: 0.4 },
-    { radius: 1, wobble: 0.03, tendril: 0.14, spin: 0.52 },
+    { radius: 0.02, wobble: 0.03, tendril: 0.8, spin: -0.2 },
+    { radius: 0.15, wobble: 0.12, tendril: 0.7, spin: -0.1 },
+    { radius: 0.4, wobble: 0.18, tendril: 0.5, spin: 0.04 },
+    { radius: 0.65, wobble: 0.12, tendril: 0.35, spin: 0.15 },
+    { radius: 0.85, wobble: 0.06, tendril: 0.2, spin: 0.3 },
+    { radius: 1, wobble: 0.02, tendril: 0.1, spin: 0.4 },
   ];
-  const duration = 400;
+  const duration = 500;
   const clipPath = beats.map(beat => ({
     clipPath: venomBlob(origin.x, origin.y, reach * beat.radius, beat),
   }));
@@ -492,7 +492,7 @@ function LayoutShell({ children }: LayoutProps) {
       {/* Branch is displayed as a single configured location until real multi-branch support is enabled. */}
       {!collapsed && (
         <div className="px-3 py-3 border-b border-border">
-          <div className="flex items-center gap-2 rounded-xl border border-border bg-[var(--brand-soft)] p-2.5">
+          <div className="flex items-center gap-2 rounded-3xl border border-border bg-[var(--brand-soft)] p-2.5">
             <Building className="shrink-0 text-[var(--brand-primary)]" size={15} />
             <div className="min-w-0">
               <p className="truncate text-xs font-semibold text-foreground">Sucursal principal</p>
@@ -504,11 +504,11 @@ function LayoutShell({ children }: LayoutProps) {
 
       {/* Nav groups */}
       <nav className="relative flex-1 overflow-y-auto px-2 py-3" data-sidebar-nav={withIndicator ? 'true' : undefined}>
-        {/* Indicador compartido: píldora oscura que se desliza hasta el ítem activo con spring 300/30. */}
+        {/* Indicador compartido: píldora naranja que se desliza hasta el ítem activo con spring 300/30. */}
         {withIndicator && sidebarIndicator && (
           <motion.span
             aria-hidden="true"
-            className="pointer-events-none absolute left-2 right-2 rounded-full bg-nav-active shadow-lift"
+            className="pointer-events-none absolute left-2 right-2 rounded-lg bg-primary"
             initial={{
               top: sidebarIndicator.from?.top ?? sidebarIndicator.to.top,
               height: sidebarIndicator.from?.height ?? sidebarIndicator.to.height,
@@ -537,9 +537,9 @@ function LayoutShell({ children }: LayoutProps) {
                     title={collapsed ? item.label : undefined}
                     data-sidebar-active={active && withIndicator ? 'true' : undefined}
                     className={`
-                      flex items-center gap-3 px-3 py-2 rounded-full text-sm font-medium transition-all duration-150 group relative min-h-[44px]
+                      flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 group relative min-h-[40px]
                       ${active
-                        ? (withIndicator ? 'text-nav-active-foreground' : 'bg-nav-active text-nav-active-foreground shadow-lift')
+                        ? (withIndicator ? 'text-primary-foreground' : 'bg-primary text-primary-foreground')
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                       }
                       ${collapsed ? 'justify-center' : ''}
@@ -566,21 +566,21 @@ function LayoutShell({ children }: LayoutProps) {
       </nav>
 
       {/* User + logout */}
-      <div className={`border-t border-border p-3 space-y-1`}>
+      <div className={`border-t border-sidebar-border p-3 space-y-1`}>
         {!collapsed && (
           <div className="flex items-center gap-2 px-2 py-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
               <span className="text-white text-xs font-bold">{user?.name?.charAt(0).toUpperCase()}</span>
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="text-xs font-semibold text-foreground truncate">{user?.name}</p>
-              <p className="text-[10px] text-orange-500 capitalize">{roleLabel(user?.role)}</p>
+              <p className="text-[10px] text-primary capitalize">{roleLabel(user?.role)}</p>
             </div>
           </div>
         )}
         <button
           onClick={handleLogout}
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-full text-sm text-muted-foreground hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 transition-colors min-h-[44px] ${collapsed ? 'justify-center' : ''}`}
+          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors min-h-[40px] ${collapsed ? 'justify-center' : ''}`}
         >
           <LogOut size={18} />
           {!collapsed && <span>Cerrar sesión</span>}
@@ -593,7 +593,7 @@ function LayoutShell({ children }: LayoutProps) {
     <div className="flex h-screen bg-background overflow-hidden">
       {/* ── Desktop sidebar ── */}
       <aside
-        className={`hidden md:flex flex-col bg-card border-r border-border transition-all duration-300 flex-shrink-0 ${sidebarCollapsed ? 'w-16' : 'w-60'}`}
+        className={`hidden md:flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 flex-shrink-0 ${sidebarCollapsed ? 'w-16' : 'w-60'}`}
       >
         {SidebarContent({ collapsed: sidebarCollapsed, withIndicator: true })}
       </aside>
@@ -614,7 +614,7 @@ function LayoutShell({ children }: LayoutProps) {
               animate={{ x: 0 }}
               exit={{ x: -260 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="md:hidden fixed left-0 top-0 bottom-0 w-64 bg-card border-r border-border z-50 flex flex-col"
+              className="md:hidden fixed left-0 top-0 bottom-0 w-64 bg-sidebar border-r border-sidebar-border z-50 flex flex-col"
             >
               <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                 <span className="font-bold text-sm text-foreground">Menú</span>
@@ -633,7 +633,7 @@ function LayoutShell({ children }: LayoutProps) {
       {/* ── Main area ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="flex-shrink-0 h-14 bg-card border-b border-border flex items-center px-4 gap-3 z-10">
+        <header className="flex-shrink-0 h-14 bg-sidebar border-b border-sidebar-border flex items-center px-4 gap-3 z-10">
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileSidebarOpen(true)}
@@ -658,14 +658,14 @@ function LayoutShell({ children }: LayoutProps) {
             </p>
           </div>
 
-          <div title={isDesktopMode() ? 'Aplicación de escritorio: los datos demo se guardan en este equipo.' : databaseConnected ? 'Las operaciones del servidor se guardan en SQLite.' : 'No hay conexión con la API. Las operaciones que requieren el servidor pueden fallar; no continúes ventas hasta recuperar la conexión.'} className={`hidden sm:flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold ${databaseConnected ? 'bg-emerald-50/80 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300' : 'bg-amber-50/80 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300'}`}>
+          <div title={isDesktopMode() ? 'Aplicación de escritorio: los datos demo se guardan en este equipo.' : databaseConnected ? 'Las operaciones del servidor se guardan en SQLite.' : 'No hay conexión con la API. Las operaciones que requieren el servidor pueden fallar; no continúes ventas hasta recuperar la conexión.'} className={`hidden sm:flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold ${databaseConnected ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
             <Database size={13} />
             {databaseConnected === null ? 'Verificando datos…' : databaseConnected ? 'Base de datos conectada' : isDesktopMode() ? 'Modo escritorio local' : 'Modo local de prueba'}
           </div>
 
           {/* Empresa selector (desktop) */}
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-background text-xs font-medium text-muted-foreground">
-            <Building2 size={14} className="text-orange-500" />
+            <Building2 size={14} className="text-primary" />
             <span>{config?.name || 'Negocio principal'}</span>
           </div>
 
@@ -676,13 +676,13 @@ function LayoutShell({ children }: LayoutProps) {
             title={isDark ? 'Modo claro' : 'Modo oscuro'}
             aria-label={isDark ? 'Activar tema claro' : 'Activar tema oscuro'}
           >
-            {isDark ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
+            {isDark ? <Sun size={18} className="text-amber-300" /> : <Moon size={18} />}
           </button>}
 
           {/* POS shortcut is visible only if the current role is authorized. */}
           {canAccessPath('/pos', user?.role, config, user?.customRoleId ? (user.permissions ?? []) : undefined) && <button
             onClick={() => navigate('/pos')}
-            className="p-2 rounded-full hover:bg-[var(--brand-soft)] text-muted-foreground hover:text-[var(--brand-primary)] transition-colors"
+            className="p-2 rounded-full hover:bg-accent text-muted-foreground hover:text-primary transition-colors"
             title="Abrir punto de venta"
             aria-label="Abrir punto de venta"
           >
@@ -711,13 +711,13 @@ function LayoutShell({ children }: LayoutProps) {
       </div>
 
       {/* ── Mobile bottom tab bar ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-30 safe-area-inset-bottom">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-30 safe-area-inset-bottom">
         <div className="relative flex">
           {/* Indicador compartido: se desliza hasta la pestaña activa. */}
           {activeMobileIndex >= 0 && (
             <motion.span
               aria-hidden="true"
-              className="pointer-events-none absolute top-0 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-orange-500"
+              className="pointer-events-none absolute top-0 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-primary"
               initial={{ left: `${(((lastBottomIndicatorIndex ?? activeMobileIndex) + 0.5) / mobileBottomItems.length) * 100}%` }}
               animate={{ left: `${((activeMobileIndex + 0.5) / mobileBottomItems.length) * 100}%` }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -746,7 +746,7 @@ function LayoutShell({ children }: LayoutProps) {
                 key={item.path}
                 to={item.path}
                 className={`flex-1 flex flex-col items-center justify-center py-2 min-h-[56px] transition-colors relative ${
-                  active ? 'text-orange-500' : 'text-muted-foreground'
+                  active ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
                 <div className="relative">
@@ -780,7 +780,7 @@ function LayoutShell({ children }: LayoutProps) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 rounded-t-2xl pb-safe"
+              className="md:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-50 rounded-t-2xl pb-safe"
             >
               <div className="p-4">
                 <div className="w-10 h-1 bg-border rounded-full mx-auto mb-4" />
@@ -793,20 +793,20 @@ function LayoutShell({ children }: LayoutProps) {
                         key={`${item.path}|${item.label}`}
                         to={item.path}
                         onClick={() => { setActiveNavLabel(item.label); setShowMoreMenu(false); }}
-                        className="flex flex-col items-center gap-1 p-3 rounded-xl bg-accent hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors"
+                        className="flex flex-col items-center gap-1 p-3 rounded-3xl bg-accent hover:bg-accent transition-colors"
                       >
-                        <Icon size={20} className={isActiveNavItem(item) ? 'text-orange-500' : 'text-muted-foreground'} />
+                        <Icon size={20} className={isActiveNavItem(item) ? 'text-primary' : 'text-muted-foreground'} />
                         <span className="text-[10px] text-center text-foreground font-medium leading-tight">{item.label}</span>
                       </Link>
                     );
                   })}
                 </div>
                 <div className="mt-4 flex gap-2">
-                  {user?.role === 'owner' && <button onClick={handleThemeToggle} className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-accent text-sm text-muted-foreground">
-                    {isDark ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} />}
+                  {user?.role === 'owner' && <button onClick={handleThemeToggle} className="flex-1 flex items-center justify-center gap-2 p-3 rounded-3xl bg-accent text-sm text-muted-foreground">
+                    {isDark ? <Sun size={16} className="text-amber-300" /> : <Moon size={16} />}
                     <span>{isDark ? 'Modo claro' : 'Modo oscuro'}</span>
                   </button>}
-                  <button onClick={handleLogout} className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 text-sm text-red-600">
+                  <button onClick={handleLogout} className="flex-1 flex items-center justify-center gap-2 p-3 rounded-3xl bg-destructive/10 text-sm text-red-600">
                     <LogOut size={16} />
                     <span>Salir</span>
                   </button>

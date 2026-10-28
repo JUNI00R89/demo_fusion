@@ -1,107 +1,112 @@
-@custom-variant dark (&:is(.dark *));
-
-/* ── Sistema visual (claro) ──────────────────────────────────────────────────
-   Minimalista tipo Apple/Linear: fondo neutro, tarjetas blancas, texto negro y
-   acento naranja (#F26A1B → #FF8A4C). Los tokens alimentan a todo shadcn. */
+/* ── Sistema visual unificado - Dark Sober Professional ───────────────────────
+   - Fondo general: #080B10
+   - Fondo de navegación: #0D1118
+   - Superficie de tarjetas: #11161E
+   - Superficie secundaria: #171D26
+   - Bordes sutiles: #222A35
+   - Texto principal: #F1F3F6
+   - Texto secundario: #A0AABA
+   - Acento único: naranja #FF6B00
+   - Radio: moderados
+   - Sombras mínimas
+   - Tipografía: Inter
+   */
+/* ── Modo claro ───────────────────────────────────────────────────────────────*/
 :root {
-  --font-size: 16px;
-  --background: #F4F4F6;
-  --foreground: #0B0B0E;
+  --background: #F5F5F5;
+  --foreground: #0A0A0A;
   --card: #FFFFFF;
-  --card-foreground: #0B0B0E;
+  --card-foreground: #0A0A0A;
   --popover: #FFFFFF;
-  --popover-foreground: #0B0B0E;
-  --primary: #F26A1B;
+  --popover-foreground: #0A0A0A;
+  --primary: #FF6B00;
   --primary-foreground: #FFFFFF;
-  --secondary: #EDEDF1;
-  --secondary-foreground: #0B0B0E;
-  --muted: #EDEDF1;
-  --muted-foreground: #6E6E78;
-  --accent: #EFEFF3;
-  --accent-foreground: #0B0B0E;
-  --destructive: #DC2626;
+  --primary-hover: #E85D00;
+  --secondary: #Fafafa;
+  --secondary-foreground: #0A0A0A;
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+  --accent: #Fafafa;
+  --accent-foreground: #0A0A0A;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(9, 9, 11, 0.08);
-  --input: rgba(9, 9, 11, 0.10);
+  --border: #E5E7EB;
+  --input: #E5E7EB;
   --input-background: #FFFFFF;
-  --switch-background: #D4D4D8;
+  --switch-background: #D1D5DB;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: rgba(242, 106, 27, 0.45);
-  /* Gráficos: el acento naranja alterna con el negro del texto. */
-  --chart-1: #F26A1B;
-  --chart-2: #0B0B0E;
-  --chart-3: #FF8A4C;
-  --chart-4: #A1A1AA;
-  --chart-5: #10B981;
-  /* Radio base 16 px (las tarjetas quedan en 20 px con --radius-2xl). */
-  --radius: 1rem;
+  --ring: rgba(255, 107, 0, 0.25);
+  --chart-1: #FF6B00;
+  --chart-2: #6B7280;
+  --chart-3: #22C55E;
+  --chart-4: #F59E0B;
+  --chart-5: #EF4444;
+  --radius: 0.5rem;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #0B0B0E;
-  --sidebar-primary: #F26A1B;
+  --sidebar-foreground: #0A0A0A;
+  --sidebar-primary: #FF6B00;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #EFEFF3;
-  --sidebar-accent-foreground: #0B0B0E;
-  --sidebar-border: rgba(9, 9, 11, 0.08);
-  --sidebar-ring: rgba(242, 106, 27, 0.4);
-  /* Positivos / negativos y acento degradado. */
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #0A0A0A;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: rgba(255, 107, 0, 0.2);
   --positive: #059669;
-  --negative: #DC2626;
-  --accent-from: #F26A1B;
-  --accent-to: #FF8A4C;
-  /* Elevaciones suaves y píldora activa de navegación. */
-  --app-shadow-card: 0 1px 2px rgba(9, 9, 11, 0.04), 0 14px 30px -24px rgba(9, 9, 11, 0.35);
-  --app-shadow-card-hover: 0 2px 6px rgba(9, 9, 11, 0.05), 0 26px 44px -30px rgba(9, 9, 11, 0.45);
-  --nav-active-bg: #0B0B0E;
+  --negative: #DC2727;
+  --accent-from: #FF6B00;
+  --accent-to: #E85D00;
+  --app-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --app-shadow-card-hover: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --nav-active-bg: #FF6B00;
   --nav-active-fg: #FFFFFF;
 }
 
-/* ── Sistema visual (oscuro): fondo #0D0D10, tarjetas #17171B, texto blanco.
-   El naranja se mantiene igual que en modo claro. */
+/* ── Modo oscuro ─────────────────────────────────────────────────────────────*/
 .dark {
-  --background: #0D0D10;
-  --foreground: #FAFAFA;
-  --card: #17171B;
-  --card-foreground: #FAFAFA;
-  --popover: #17171B;
-  --popover-foreground: #FAFAFA;
-  --primary: #F26A1B;
+  --background: #080B10;
+  --foreground: #F1F3F6;
+  --card: #11161E;
+  --card-foreground: #F1F3F6;
+  --popover: #11161E;
+  --popover-foreground: #F1F3F6;
+  --primary: #FF6B00;
   --primary-foreground: #FFFFFF;
-  --secondary: #232329;
-  --secondary-foreground: #FAFAFA;
-  --muted: #232329;
-  --muted-foreground: #9A9AA5;
-  --accent: #232329;
-  --accent-foreground: #FAFAFA;
+  --primary-hover: #E85D00;
+  --secondary: #171D26;
+  --secondary-foreground: #F1F3F6;
+  --muted: #171D26;
+  --muted-foreground: #A0AABA;
+  --accent: #171D26;
+  --accent-foreground: #F1F3F6;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(255, 255, 255, 0.06);
-  --input: rgba(255, 255, 255, 0.14);
-  --input-background: #1C1C21;
-  --switch-background: #3F3F46;
-  --ring: rgba(242, 106, 27, 0.5);
+  --border: #222A35;
+  --input: #222A35;
+  --input-background: #11161E;
+  --switch-background: #222A35;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --chart-1: #F26A1B;
-  --chart-2: #FAFAFA;
-  --chart-3: #FF8A4C;
-  --chart-4: #71717A;
-  --chart-5: #34D399;
-  --sidebar: #131317;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-primary: #F26A1B;
+  --ring: rgba(255, 107, 0, 0.25);
+  --chart-1: #FF6B00;
+  --chart-2: #A0AABA;
+  --chart-3: #22C55E;
+  --chart-4: #F59E0B;
+  --chart-5: #EF4444;
+  --sidebar: #0D1118;
+  --sidebar-foreground: #F1F3F6;
+  --sidebar-primary: #FF6B00;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #232329;
-  --sidebar-accent-foreground: #FAFAFA;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: rgba(242, 106, 27, 0.45);
-  --positive: #34D399;
-  --negative: #F87171;
-  --accent-from: #F26A1B;
-  --accent-to: #FF8A4C;
-  --app-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.45), 0 18px 34px -26px rgba(0, 0, 0, 0.75);
-  --app-shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.5), 0 30px 50px -32px rgba(0, 0, 0, 0.85);
-  --nav-active-bg: #2C2C34;
+  --sidebar-accent: #171D26;
+  --sidebar-accent-foreground: #F1F3F6;
+  --sidebar-border: #222A35;
+  --sidebar-ring: rgba(255, 107, 0, 0.25);
+  --positive: #22C55E;
+  --negative: #EF4444;
+  --accent-from: #FF6B00;
+  --accent-to: #E85D00;
+  --app-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --app-shadow-card-hover: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --nav-active-bg: #FF6B00;
   --nav-active-fg: #FFFFFF;
 }
 
@@ -114,6 +119,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -132,13 +138,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  /* Tarjetas y contenedores: 20 px (rango 16-20 px del sistema visual). */
-  --radius-2xl: 1.25rem;
-  --radius-3xl: 1.5rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.25rem;
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-nav-active: var(--nav-active-bg);
@@ -167,25 +172,19 @@
     font-family: var(--font-sans);
   }
 
-  /* Títulos con la tipografía display heredada de Managuer_Stock. */
   h1, h2 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
-  /* Evita que el input se vea 'saltón' al enfocar en iOS. */
+
   input, select, textarea {
     font-family: inherit;
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--brand-primary, #F26A1B) 22%, transparent);
+    background: color-mix(in srgb, var(--primary) 25%, transparent);
   }
-
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
 
   html {
     font-size: var(--font-size);
@@ -234,7 +233,6 @@
   }
 }
 
-/* ── Utilidades de la app (fusión con Managuer_Stock) ────────────────────── */
 @utility scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--muted-foreground) 35%, transparent) transparent;
@@ -245,7 +243,7 @@
 }
 
 @utility bg-brand {
-  background-color: var(--brand-primary, #F26A1B);
+  background-color: var(--primary);
 }
 
 @utility num {
@@ -265,41 +263,50 @@
   }
 }
 
-/* ── Responsive: base global ──────────────────────────────────────────────
-   Estas reglas corrigen en un solo lugar problemas que se repiten en muchas
-   páginas, sin tener que editar cada una. */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+
 body {
   -webkit-tap-highlight-color: transparent;
   overflow-wrap: break-word;
 }
+
 img, video, canvas, svg { max-width: 100%; }
 
-/* Celulares: los encabezados "título + botón" saltan de línea en vez de apretarse */
 @media (max-width: 639px) {
   .flex.justify-between.items-center:has(> :first-child > h1),
   .flex.justify-between.items-center:has(> :first-child > h2) {
     flex-wrap: wrap;
     gap: 0.75rem;
   }
-  /* Evita que una tabla o tarjeta ancha empuje la página en horizontal */
   main { overflow-x: clip; }
 }
 
-/* Pantallas táctiles: objetivos de toque cómodos (44 px), salvo controles
-   diminutos que el diseño define a propósito (h-5, h-6, h-7). */
 @media (pointer: coarse) {
-  [data-slot="button"]:not([class*="h-5"]):not([class*="h-6"]):not([class*="h-7"]) { min-height: 44px; }
+  [data-slot="button"]:not([class*="h-5"]):not([class*="h-6"]):not([class*="h-7"]) {
+    min-height: 44px;
+  }
   [data-slot="button"][class*="size-"] { min-width: 44px; }
   [data-slot="input"], select { min-height: 44px; }
   header button { min-width: 44px; min-height: 44px; }
   aside nav a { min-height: 44px; }
 }
 
-/* Los inputs a 16 px evitan el zoom automático de iOS al enfocar */
 @media (max-width: 767px) {
   input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; }
+}
+
+html {
+  transition-property: background-color, color, border-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition-duration: 0.01ms !important;
+    transition-property: none !important;
+  }
 }

@@ -92,7 +92,7 @@ export function ProductRiskCard({ products, sales }: ProductRiskCardProps) {
   ];
 
   return (
-    <Card className="rounded-2xl border-border/70 p-5 shadow-sm">
+    <Card className="rounded-3xl border-border/70 p-5 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
