@@ -147,7 +147,7 @@ const BUSINESS_LABELS: Record<string, string> = {
 function LayoutShell({ children }: LayoutProps) {
   const { user, logout } = useAuth();
   const { config, setConfig } = useBusiness();
-  const { isDark, setTheme } = useTheme();
+  const { isDark, setTheme, themeStyle, toggleThemeStyle } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -474,126 +474,125 @@ function LayoutShell({ children }: LayoutProps) {
    * <nav>, el indicador y los badges en cada navegación. Llamándolo directamente
    * su árbol se reconcilia dentro del marco y el nodo DOM persiste entre rutas.
    */
-  const SidebarContent = ({ collapsed, withIndicator = false }: { collapsed: boolean; withIndicator?: boolean }) => (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className={`flex items-center gap-3 px-4 py-5 border-b border-border ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-lift" style={{ background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))' }}>
-          <Warehouse className="text-white" size={18} />
-        </div>
-        {!collapsed && (
-          <div className="overflow-hidden">
-            <p className="font-bold text-sm text-foreground leading-tight">Manager Stock Pro</p>
-            <p className="text-xs text-muted-foreground truncate">{config ? (config.foodConfig?.displayLabel ?? BUSINESS_LABELS[config.type]) : 'Sistema'}</p>
+  const SidebarContent = ({ collapsed, withIndicator = false }: { collapsed: boolean; withIndicator?: boolean }) => {
+    return (
+      <div className="flex flex-col h-full py-4">
+        {/* Logo */}
+        <div className={`flex items-center gap-3 px-4 py-2 mb-4 ${collapsed ? 'justify-center' : ''}`}>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ background: 'linear-gradient(135deg, #FF5A1F, #FF3D00)' }}>
+            <Warehouse className="text-white" size={20} />
           </div>
-        )}
+          {!collapsed && (
+            <div className="overflow-hidden">
+              <p className="font-bold text-sm text-white leading-tight">Manager Stock Pro</p>
+              <p className="text-xs text-white/60 truncate">{config ? (config.foodConfig?.displayLabel ?? BUSINESS_LABELS[config.type]) : 'Sistema'}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Nav groups */}
+        <nav className="relative flex-1 overflow-y-auto px-3" data-sidebar-nav={withIndicator ? 'true' : undefined}>
+          <div className="space-y-1">
+            {groups.map((group, gi) => (
+              <div key={group}>
+                {gi > 0 && !collapsed && (
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-white/40 px-2 pt-4 pb-1">
+                    {groupLabels[group]}
+                  </p>
+                )}
+                {gi > 0 && collapsed && (
+                  <div className="h-px bg-white/10 my-2 mx-2" />
+                )}
+                {navItems.filter(i => i.group === group).map(item => {
+                  const Icon = item.icon;
+                  const active = isActiveNavItem(item);
+                  return (
+                    <Link
+                      key={`${item.path}|${item.label}`}
+                      to={item.path}
+                      onClick={() => setActiveNavLabel(item.label)}
+                      title={collapsed ? item.label : undefined}
+                      data-sidebar-active={active && withIndicator ? 'true' : undefined}
+                      className={`
+                        flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors duration-200 group relative min-h-[44px]
+                        ${active
+                          ? 'text-white'
+                          : 'text-white/60 hover:text-white hover:bg-white/10'
+                        }
+                        ${collapsed ? 'justify-center' : ''}
+                      `}
+                    >
+                      {withIndicator && sidebarIndicator && (
+                        <motion.span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute left-0 right-0 rounded-xl bg-white/10 backdrop-blur-[12px] backdrop-saturate-150 border border-white/25 shadow-[0_8px_32px_rgba(15,40,80,0.15),inset_0_1px_0_rgba(255,255,255,0.25)]"
+                          initial={{
+                            top: sidebarIndicator.from?.top ?? sidebarIndicator.to.top,
+                            height: sidebarIndicator.from?.height ?? sidebarIndicator.to.height,
+                          }}
+                          animate={{ top: sidebarIndicator.to.top, height: sidebarIndicator.to.height }}
+                          transition={{ type: 'tween', duration: 0.2, ease: 'easeInOut' }}
+                        />
+                      )}
+                      <Icon size={22} className="flex-shrink-0 relative z-10" />
+                      {!collapsed && <span className="flex-1 relative z-10">{item.label}</span>}
+                      {!collapsed && item.badge && item.badge > 0 ? (
+                        <span className="pop-in bg-red-500 text-white text-[10px] h-5 min-w-5 flex items-center justify-center px-1 rounded-full relative z-10">
+                          {item.badge}
+                        </span>
+                      ) : null}
+                      {collapsed && item.badge && item.badge > 0 ? (
+                        <span className="pop-in absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center relative z-10">
+                          {item.badge}
+                        </span>
+                      ) : null}
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </nav>
+
+        {/* Theme toggle at bottom */}
+        <div className="px-3 pt-2 border-t border-white/10 mt-2">
+          <button
+            onClick={toggleThemeStyle}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 min-h-[44px] ${collapsed ? 'justify-center' : ''}`}
+            title="Cambiar estilo"
+          >
+            <Settings size={22} />
+            {!collapsed && <span>Cambiar estilo</span>}
+          </button>
+        </div>
+
+        {/* User + logout */}
+        <div className="px-3 pb-2">
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/60 hover:text-red-400 hover:bg-white/10 transition-all duration-200 min-h-[44px] ${collapsed ? 'justify-center' : ''}`}
+            title="Cerrar sesión"
+          >
+            <LogOut size={22} />
+            {!collapsed && <span>Cerrar sesión</span>}
+          </button>
+        </div>
       </div>
-
-      {/* Branch is displayed as a single configured location until real multi-branch support is enabled. */}
-      {!collapsed && (
-        <div className="px-3 py-3 border-b border-border">
-          <div className="flex items-center gap-2 rounded-3xl border border-border bg-[var(--brand-soft)] p-2.5">
-            <Building className="shrink-0 text-[var(--brand-primary)]" size={15} />
-            <div className="min-w-0">
-              <p className="truncate text-xs font-semibold text-foreground">Sucursal principal</p>
-              <p className="text-[10px] text-muted-foreground">Configuración actual</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Nav groups */}
-      <nav className="relative flex-1 overflow-y-auto px-2 py-3" data-sidebar-nav={withIndicator ? 'true' : undefined}>
-        {/* Indicador compartido: píldora naranja que se desliza hasta el ítem activo con spring 300/30. */}
-        {withIndicator && sidebarIndicator && (
-          <motion.span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-2 right-2 rounded-lg bg-primary"
-            initial={{
-              top: sidebarIndicator.from?.top ?? sidebarIndicator.to.top,
-              height: sidebarIndicator.from?.height ?? sidebarIndicator.to.height,
-              opacity: sidebarIndicator.from ? 1 : 0,
-            }}
-            animate={{ top: sidebarIndicator.to.top, height: sidebarIndicator.to.height, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          />
-        )}
-        <div className="space-y-1">
-          {groups.map((group, gi) => (
-            <div key={group}>
-              {gi > 0 && !collapsed && (
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground px-2 pt-4 pb-1">
-                  {groupLabels[group]}
-                </p>
-              )}
-              {navItems.filter(i => i.group === group).map(item => {
-                const Icon = item.icon;
-                const active = isActiveNavItem(item);
-                return (
-                  <Link
-                    key={`${item.path}|${item.label}`}
-                    to={item.path}
-                    onClick={() => setActiveNavLabel(item.label)}
-                    title={collapsed ? item.label : undefined}
-                    data-sidebar-active={active && withIndicator ? 'true' : undefined}
-                    className={`
-                      flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 group relative min-h-[40px]
-                      ${active
-                        ? (withIndicator ? 'text-primary-foreground' : 'bg-primary text-primary-foreground')
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                      }
-                      ${collapsed ? 'justify-center' : ''}
-                    `}
-                  >
-                    <Icon size={18} className="flex-shrink-0" />
-                    {!collapsed && <span className="flex-1">{item.label}</span>}
-                    {!collapsed && item.badge && item.badge > 0 ? (
-                      <Badge className="pop-in bg-red-500 text-white text-[10px] h-5 min-w-5 flex items-center justify-center px-1">
-                        {item.badge}
-                      </Badge>
-                    ) : null}
-                    {collapsed && item.badge && item.badge > 0 ? (
-                      <span className="pop-in absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center">
-                        {item.badge}
-                      </span>
-                    ) : null}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </nav>
-
-      {/* User + logout */}
-      <div className={`border-t border-sidebar-border p-3 space-y-1`}>
-        {!collapsed && (
-          <div className="flex items-center gap-2 px-2 py-2">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-xs font-bold">{user?.name?.charAt(0).toUpperCase()}</span>
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <p className="text-xs font-semibold text-foreground truncate">{user?.name}</p>
-              <p className="text-[10px] text-primary capitalize">{roleLabel(user?.role)}</p>
-            </div>
-          </div>
-        )}
-        <button
-          onClick={handleLogout}
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors min-h-[40px] ${collapsed ? 'justify-center' : ''}`}
-        >
-          <LogOut size={18} />
-          {!collapsed && <span>Cerrar sesión</span>}
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* ── Desktop sidebar ── */}
       <aside
-        className={`hidden md:flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 flex-shrink-0 ${sidebarCollapsed ? 'w-16' : 'w-60'}`}
+        className={`hidden md:flex flex-col transition-all duration-300 flex-shrink-0 m-4 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}
+        style={{
+          background: 'rgba(17, 17, 17, 0.8)',
+          backdropFilter: 'blur(12px)',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        }}
       >
         {SidebarContent({ collapsed: sidebarCollapsed, withIndicator: true })}
       </aside>
@@ -633,7 +632,12 @@ function LayoutShell({ children }: LayoutProps) {
       {/* ── Main area ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="flex-shrink-0 h-14 bg-sidebar border-b border-sidebar-border flex items-center px-4 gap-3 z-10">
+        <header className="flex-shrink-0 h-14 mx-4 mt-4 rounded-full flex items-center px-6 gap-3 z-10" style={{
+          background: 'rgba(17, 17, 17, 0.7)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        }}>
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileSidebarOpen(true)}

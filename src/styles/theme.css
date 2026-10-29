@@ -1,113 +1,205 @@
-/* ── Sistema visual unificado - Dark Sober Professional ───────────────────────
-   - Fondo general: #080B10
-   - Fondo de navegación: #0D1118
-   - Superficie de tarjetas: #11161E
-   - Superficie secundaria: #171D26
-   - Bordes sutiles: #222A35
-   - Texto principal: #F1F3F6
-   - Texto secundario: #A0AABA
-   - Acento único: naranja #FF6B00
-   - Radio: moderados
-   - Sombras mínimas
-   - Tipografía: Inter
+/* ── CoinSphere Glassmorphism Style ───────────────────────────────────────────
+   - Fondo: degradado naranja-rojo (#FF5A1F → #FF3D00) con manchas de luz amarilla
+   - Contenedor principal: #111
+   - Tarjetas: semitransparentes con backdrop-blur, borde 1px blanco 8%
+   - Radio: 20px
+   - Acento: naranja
+   - Verde/rojo para positivos/negativos
+   - Tipografía: DM Sans
    */
 /* ── Modo claro ───────────────────────────────────────────────────────────────*/
 :root {
-  --background: #F5F5F5;
-  --foreground: #0A0A0A;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
-  --primary: #FF6B00;
+  --background: linear-gradient(135deg, #FF5A1F 0%, #FF3D00 50%, #FF1A00 100%);
+  --foreground: #FFFFFF;
+  --card: rgba(17, 17, 17, 0.7);
+  --card-foreground: #FFFFFF;
+  --popover: rgba(17, 17, 17, 0.9);
+  --popover-foreground: #FFFFFF;
+  --primary: #FF5A1F;
   --primary-foreground: #FFFFFF;
-  --primary-hover: #E85D00;
-  --secondary: #Fafafa;
-  --secondary-foreground: #0A0A0A;
-  --muted: #F3F4F6;
-  --muted-foreground: #6B7280;
-  --accent: #Fafafa;
-  --accent-foreground: #0A0A0A;
+  --primary-hover: #FF3D00;
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+  --accent: rgba(255, 90, 31, 0.3);
+  --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E5E7EB;
-  --input: #E5E7EB;
-  --input-background: #FFFFFF;
-  --switch-background: #D1D5DB;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --input-background: rgba(17, 17, 17, 0.6);
+  --switch-background: rgba(255, 255, 255, 0.2);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: rgba(255, 107, 0, 0.25);
-  --chart-1: #FF6B00;
-  --chart-2: #6B7280;
-  --chart-3: #22C55E;
+  --ring: rgba(255, 90, 31, 0.5);
+  --chart-1: #FF5A1F;
+  --chart-2: #22C55E;
+  --chart-3: #EF4444;
   --chart-4: #F59E0B;
-  --chart-5: #EF4444;
-  --radius: 0.5rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0A0A0A;
-  --sidebar-primary: #FF6B00;
+  --chart-5: #06B6D4;
+  --radius: 1.25rem;
+  --sidebar: rgba(17, 17, 17, 0.8);
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FF5A1F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F3F4F6;
-  --sidebar-accent-foreground: #0A0A0A;
-  --sidebar-border: #E5E7EB;
-  --sidebar-ring: rgba(255, 107, 0, 0.2);
-  --positive: #059669;
-  --negative: #DC2727;
-  --accent-from: #FF6B00;
-  --accent-to: #E85D00;
-  --app-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.02);
-  --app-shadow-card-hover: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --nav-active-bg: #FF6B00;
+  --sidebar-accent: rgba(255, 90, 31, 0.2);
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(255, 90, 31, 0.5);
+  --positive: #22C55E;
+  --negative: #EF4444;
+  --accent-from: #FF5A1F;
+  --accent-to: #FF3D00;
+  --app-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --app-shadow-card-hover: 0 12px 40px rgba(255, 90, 31, 0.3);
+  --nav-active-bg: #FF5A1F;
   --nav-active-fg: #FFFFFF;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'DM Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* ── Modo oscuro ─────────────────────────────────────────────────────────────*/
 .dark {
-  --background: #080B10;
-  --foreground: #F1F3F6;
-  --card: #11161E;
-  --card-foreground: #F1F3F6;
-  --popover: #11161E;
-  --popover-foreground: #F1F3F6;
-  --primary: #FF6B00;
+  --background: linear-gradient(135deg, #FF5A1F 0%, #FF3D00 50%, #FF1A00 100%);
+  --foreground: #FFFFFF;
+  --card: rgba(17, 17, 17, 0.7);
+  --card-foreground: #FFFFFF;
+  --popover: rgba(17, 17, 17, 0.9);
+  --popover-foreground: #FFFFFF;
+  --primary: #FF5A1F;
   --primary-foreground: #FFFFFF;
-  --primary-hover: #E85D00;
-  --secondary: #171D26;
-  --secondary-foreground: #F1F3F6;
-  --muted: #171D26;
-  --muted-foreground: #A0AABA;
-  --accent: #171D26;
-  --accent-foreground: #F1F3F6;
+  --primary-hover: #FF3D00;
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+  --accent: rgba(255, 90, 31, 0.3);
+  --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #222A35;
-  --input: #222A35;
-  --input-background: #11161E;
-  --switch-background: #222A35;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: rgba(255, 107, 0, 0.25);
-  --chart-1: #FF6B00;
-  --chart-2: #A0AABA;
-  --chart-3: #22C55E;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --input-background: rgba(17, 17, 17, 0.6);
+  --switch-background: rgba(255, 255, 255, 0.2);
+  --ring: rgba(255, 90, 31, 0.5);
+  --chart-1: #FF5A1F;
+  --chart-2: #22C55E;
+  --chart-3: #EF4444;
   --chart-4: #F59E0B;
-  --chart-5: #EF4444;
-  --sidebar: #0D1118;
-  --sidebar-foreground: #F1F3F6;
-  --sidebar-primary: #FF6B00;
+  --chart-5: #06B6D4;
+  --sidebar: rgba(17, 17, 17, 0.8);
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FF5A1F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #171D26;
-  --sidebar-accent-foreground: #F1F3F6;
-  --sidebar-border: #222A35;
-  --sidebar-ring: rgba(255, 107, 0, 0.25);
+  --sidebar-accent: rgba(255, 90, 31, 0.2);
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(255, 90, 31, 0.5);
   --positive: #22C55E;
   --negative: #EF4444;
-  --accent-from: #FF6B00;
-  --accent-to: #E85D00;
-  --app-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --app-shadow-card-hover: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --nav-active-bg: #FF6B00;
+  --accent-from: #FF5A1F;
+  --accent-to: #FF3D00;
+  --app-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --app-shadow-card-hover: 0 12px 40px rgba(255, 90, 31, 0.3);
+  --nav-active-bg: #FF5A1F;
   --nav-active-fg: #FFFFFF;
+}
+
+/* ── Dark Mesh Gradient Style ─────────────────────────────────────────────────*/
+:root.theme-mesh {
+  --background: #0A0A0F;
+  --foreground: #FFFFFF;
+  --card: rgba(20, 20, 30, 0.6);
+  --card-foreground: #FFFFFF;
+  --popover: rgba(20, 20, 30, 0.8);
+  --popover-foreground: #FFFFFF;
+  --primary: #8B5CF6;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #7C3AED;
+  --secondary: rgba(30, 30, 45, 0.6);
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(30, 30, 45, 0.5);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+  --accent: rgba(139, 92, 246, 0.3);
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --input-background: rgba(20, 20, 30, 0.6);
+  --switch-background: rgba(255, 255, 255, 0.2);
+  --ring: rgba(139, 92, 246, 0.5);
+  --chart-1: #8B5CF6;
+  --chart-2: #EC4899;
+  --chart-3: #06B6D4;
+  --chart-4: #F59E0B;
+  --chart-5: #EF4444;
+  --radius: 1rem;
+  --sidebar: rgba(15, 15, 25, 0.8);
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #8B5CF6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(139, 92, 246, 0.3);
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(139, 92, 246, 0.5);
+  --positive: #22C55E;
+  --negative: #EF4444;
+  --accent-from: #8B5CF6;
+  --accent-to: #EC4899;
+  --app-shadow-card: 0 0 60px -10px rgba(139, 92, 246, 0.3), 0 0 30px -20px rgba(236, 72, 153, 0.4);
+  --app-shadow-card-hover: 0 0 80px -10px rgba(139, 92, 246, 0.5), 0 0 40px -15px rgba(236, 72, 153, 0.6);
+  --nav-active-bg: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  --nav-active-fg: #FFFFFF;
+  --font-sans: 'Satoshi', 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.theme-mesh body {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+              radial-gradient(ellipse 60% 40% at 20% 100%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+              #0A0A0F;
+  background-attachment: fixed;
+}
+
+.theme-mesh [data-slot="card"]:not([data-slot="card"] *) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-mesh [data-slot="card"]:not([data-slot="card"] *)::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: radial-gradient(ellipse 80% 100% at 50% 100%, rgba(139, 92, 246, 0.25) 0%, rgba(236, 72, 153, 0.15) 40%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.theme-mesh [data-slot="card"]:not([data-slot="card"] *) > * {
+  position: relative;
+  z-index: 1;
+}
+
+.theme-mesh button:not([class*="ghost"]):not([class*="outline"]):not([class*="secondary"]):not([class*="destructive"]) {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  border: none;
+  box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.5);
+}
+
+.theme-mesh button:not([class*="ghost"]):not([class*="outline"]):not([class*="secondary"]):not([class*="destructive"]):hover {
+  box-shadow: 0 0 40px -5px rgba(139, 92, 246, 0.7);
 }
 
 @theme inline {
@@ -138,12 +230,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.625rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.25rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2rem;
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-nav-active: var(--nav-active-bg);
@@ -158,8 +250,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 @layer base {
@@ -168,8 +260,19 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    background: var(--background);
+    background-attachment: fixed;
+    @apply text-foreground antialiased;
     font-family: var(--font-sans);
+  }
+
+  body::before {
+    display: none;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
   }
 
   h1, h2 {
